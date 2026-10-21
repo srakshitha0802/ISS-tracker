@@ -21,8 +21,8 @@ export default function ISSLogo({
   const isSm = size === 'sm';
   const isLg = size === 'lg';
 
-  const badgeSize = isSm ? 'w-9 h-9' : isLg ? 'w-14 h-14' : 'w-11 h-11';
-  const iconSize = isSm ? 'w-7 h-7' : isLg ? 'w-11 h-11' : 'w-8 h-8';
+  const badgeSize = isSm ? 'w-10 h-10' : isLg ? 'w-18 h-18' : 'w-13 h-13 sm:w-15 sm:h-15';
+  const iconSize = isSm ? 'w-8 h-8' : isLg ? 'w-16 h-16' : 'w-11 h-11 sm:w-13 sm:h-13';
 
   const handleClick = (e) => {
     soundEffects.playClick();
@@ -49,33 +49,27 @@ export default function ISSLogo({
       title="ISS Tracker — Return to Live Telemetry"
       className={`flex items-center gap-3 select-none group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 transition-transform active:scale-[0.98] ${className}`}
     >
-      {/* Sharp Aerospace Flight Insignia */}
+      {/* Light Curve Emblem Container without harsh edges/highlights */}
       <div className="relative shrink-0">
         <div
-          className={`relative ${badgeSize} bg-slate-950 border border-cyan-400/80 flex items-center justify-center transition-all duration-300 shadow-[0_0_15px_rgba(6,182,212,0.35)] group-hover:border-cyan-300 group-hover:shadow-[0_0_25px_rgba(34,211,238,0.6)]`}
+          className={`relative ${badgeSize} rounded-2xl bg-slate-900/60 backdrop-blur-md border border-white/10 flex items-center justify-center p-1 transition-all duration-300 group-hover:border-cyan-400/40 group-hover:bg-slate-800/80`}
         >
-          {/* Corner Precision Aerospace Target Notches */}
-          <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-cyan-300 pointer-events-none" />
-          <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-cyan-300 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-cyan-300 pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-cyan-300 pointer-events-none" />
-
           {/* Official Mission Emblem Image or Precision Vector Fallback */}
           {!imageError ? (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
               src={getAssetPath('/logo.png')}
               alt="ISS Tracker Official Aerospace Emblem"
-              width={64}
-              height={64}
+              width={80}
+              height={80}
               onError={() => setImageError(true)}
-              className={`${iconSize} object-cover rounded-full shadow-[0_0_10px_rgba(6,182,212,0.5)] transition-transform duration-500 group-hover:scale-105`}
+              className={`${iconSize} object-cover rounded-xl transition-transform duration-300 group-hover:scale-105`}
             />
           ) : (
             /* High-Precision ISS Vector SVG Fallback */
             <svg
               viewBox="0 0 64 64"
-              className={`${iconSize} transition-transform duration-500 group-hover:scale-105`}
+              className={`${iconSize} transition-transform duration-300 group-hover:scale-105`}
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -147,31 +141,28 @@ export default function ISSLogo({
               <circle cx="32" cy="19" r="1.5" fill="#22d3ee" className="animate-ping" />
             </svg>
           )}
-
-          {/* Exterior Corner Active Pulse LED */}
-          <div className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
         </div>
       </div>
 
       {/* Identity Typography */}
       <div className="leading-tight">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <span
-            className={`font-black tracking-widest text-white uppercase font-sans ${
-              isSm ? 'text-sm' : isLg ? 'text-2xl' : 'text-lg sm:text-xl'
+            className={`font-black tracking-wider text-white uppercase font-sans ${
+              isSm ? 'text-sm' : isLg ? 'text-2xl' : 'text-xl sm:text-2xl'
             }`}
           >
             ISS<span className="text-cyan-400">TRACKER</span>
           </span>
-          <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 bg-cyan-950/90 text-cyan-300 border border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.3)] tracking-wider">
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-950/80 text-cyan-300 border border-cyan-500/30 tracking-wider">
             LIVE
           </span>
         </div>
 
         {showSubtext && (
           <p
-            className={`font-mono text-slate-400 uppercase tracking-widest ${
-              isSm ? 'text-[9px]' : 'text-[10px]'
+            className={`font-mono text-slate-400 uppercase tracking-widest mt-0.5 ${
+              isSm ? 'text-[9px]' : 'text-[10px] sm:text-[11px]'
             }`}
           >
             NORAD #25544 <span className="text-cyan-500/60">•</span> 51.64° INC <span className="text-cyan-500/60">•</span> LEO FLIGHT
