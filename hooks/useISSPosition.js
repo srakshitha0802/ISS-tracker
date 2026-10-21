@@ -235,8 +235,14 @@ export function useISSPosition(options = {}) {
 
   // Set up polling interval & visibility change listener
   useEffect(() => {
-    // Initial fetch on mount
-    executeFetch(false);
+    let isMounted = true;
+
+    // Defer initial fetch to next tick to avoid synchronous effect setState cascade
+    const initialTimer = setTimeout(() => {
+      if (isMounted) {
+        executeFetch(false);
+      }
+    }, 0);
 
     const startPolling = () => {
       if (pollTimerRef.current) clearInterval(pollTimerRef.current);
@@ -280,6 +286,8 @@ export function useISSPosition(options = {}) {
     window.addEventListener('offline', handleOffline);
 
     return () => {
+      isMounted = false;
+      clearTimeout(initialTimer);
       if (pollTimerRef.current) clearInterval(pollTimerRef.current);
       if (abortControllerRef.current) abortControllerRef.current.abort();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
