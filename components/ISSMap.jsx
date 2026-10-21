@@ -1,28 +1,27 @@
 'use client';
 
 import React, { useEffect, useRef, useMemo, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker, Circle, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { Crosshair, Eye, EyeOff, Navigation, Compass, Layers, Orbit, Volume2, VolumeX } from 'lucide-react';
+import { Crosshair, Eye, EyeOff, Navigation, Compass, Layers, Orbit, Volume2, VolumeX, Sun } from 'lucide-react';
 import { formatLatitude, formatLongitude, formatAltitude, formatVelocity, formatTimestamp, formatVisibility } from '@/lib/formatters';
-import { predictFutureOrbit } from '@/lib/orbitCalculation';
+import { predictFutureOrbit, calculateBearing, calculateFootprintRadius } from '@/lib/orbitCalculation';
 import { getGeographicRegion } from '@/lib/geocoding';
 import { soundEffects } from '@/lib/audio';
 
-// Custom Space Station SVG Icon
-const createISSIcon = (isDaylight = true) => {
-  const pulseColor = isDaylight ? '#0284c7' : '#6366f1';
+// Custom Space Station SVG Icon with True Orbital Bearing Heading Rotation
+const createISSIcon = (isDaylight = true, headingDeg = 0) => {
   const glowColor = isDaylight ? 'rgba(2, 132, 199, 0.4)' : 'rgba(99, 102, 241, 0.4)';
 
   const svgHtml = `
-    <div class="relative flex items-center justify-center select-none" style="width: 58px; height: 58px;">
+    <div class="relative flex items-center justify-center select-none" style="width: 64px; height: 64px;">
       <!-- Pulsing Radar Ping Rings -->
       <div class="absolute inset-0 rounded-full animate-ping opacity-60" style="background-color: ${glowColor}; animation-duration: 2.5s;"></div>
-      <div class="absolute inset-1 rounded-full border-2 border-sky-500/70 animate-pulse"></div>
+      <div class="absolute inset-1.5 rounded-full border-2 border-sky-500/70 animate-pulse"></div>
 
-      <!-- Station Core Silhouette Box -->
-      <div class="relative z-10 w-11 h-11 flex items-center justify-center bg-white rounded-full border-2 border-sky-500 shadow-[0_4px_20px_rgba(2,132,199,0.5)] backdrop-blur-sm">
-        <svg viewBox="0 0 32 32" fill="none" class="w-7 h-7 text-sky-600" xmlns="http://www.w3.org/2000/svg">
+      <!-- Station Core Silhouette with Heading Rotation -->
+      <div class="relative z-10 w-12 h-12 flex items-center justify-center bg-white rounded-full border-2 border-sky-500 shadow-[0_4px_25px_rgba(2,132,199,0.55)] backdrop-blur-sm transition-transform duration-700" style="transform: rotate(${headingDeg}deg);">
+        <svg viewBox="0 0 32 32" fill="none" class="w-8 h-8 text-sky-600" xmlns="http://www.w3.org/2000/svg">
           <!-- Solar Array Wings Left -->
           <rect x="2" y="7" width="6" height="5" rx="1.5" fill="#0284c7" stroke="#0369a1" stroke-width="0.8"/>
           <rect x="2" y="13.5" width="6" height="5" rx="1.5" fill="#0284c7" stroke="#0369a1" stroke-width="0.8"/>
@@ -40,19 +39,19 @@ const createISSIcon = (isDaylight = true) => {
           <rect x="24" y="13.5" width="6" height="5" rx="1.5" fill="#0284c7" stroke="#0369a1" stroke-width="0.8"/>
           <rect x="24" y="20" width="6" height="5" rx="1.5" fill="#0284c7" stroke="#0369a1" stroke-width="0.8"/>
         </svg>
-      </div>
 
-      <!-- Small Pointer Direction Arrow -->
-      <div class="absolute -bottom-1.5 z-20 w-2.5 h-2.5 bg-sky-500 rotate-45 shadow-[0_0_8px_#0284c7]"></div>
+        <!-- Forward Direction Indicator Tip -->
+        <div class="absolute -top-1 w-2 h-2 bg-rose-500 rounded-full shadow-[0_0_6px_#ef4444]"></div>
+      </div>
     </div>
   `;
 
   return L.divIcon({
     html: svgHtml,
     className: 'custom-iss-leaflet-icon',
-    iconSize: [58, 58],
-    iconAnchor: [29, 29],
-    popupAnchor: [0, -32]
+    iconSize: [64, 64],
+    iconAnchor: [32, 32],
+    popupAnchor: [0, -36]
   });
 };
 
@@ -149,6 +148,7 @@ export default function ISSMap({
   const markerRef = useRef(null);
   const [activeLayerKey, setActiveLayerKey] = useState('voyager');
   const [showPredictedOrbit, setShowPredictedOrbit] = useState(true);
+  const [showFootprint, setShowFootprint] = useState(true);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
 
   const coordinates = useMemo(() => {
@@ -158,8 +158,18 @@ export default function ISSMap({
     return [0, 0];
   }, [position]);
 
+  // Compute true flight heading bearing from recent trail points
+  const headingBearing = useMemo(() => {
+    if (trail.length >= 2) {
+      const p1 = trail[trail.length - 2];
+      const p2 = trail[trail.length - 1];
+      return calculateBearing(p1.latitude, p1.longitude, p2.latitude, p2.longitude);
+    }
+    return 45; // nominal northeasterly ascent
+  }, [trail]);
+
   const regionInfo = useMemo(() => {
-    if (!position) return { name: 'Space', flag: '🛰️' };
+    if (!position) return { name: 'Earth Orbit', flag: '🛰️' };
     return getGeographicRegion(position.latitude, position.longitude);
   }, [position]);
 
@@ -168,8 +178,8 @@ export default function ISSMap({
   }, [position?.visibility]);
 
   const issIcon = useMemo(() => {
-    return createISSIcon(visibilityInfo.isDaylight);
-  }, [visibilityInfo.isDaylight]);
+    return createISSIcon(visibilityInfo.isDaylight, headingBearing);
+  }, [visibilityInfo.isDaylight, headingBearing]);
 
   // Trail segments split across Date Line
   const trailSegments = useMemo(() => {
@@ -184,6 +194,10 @@ export default function ISSMap({
     return splitTrailAtDateLine(points);
   }, [position, showPredictedOrbit]);
 
+  const footprintRadiusMeters = useMemo(() => {
+    return calculateFootprintRadius(position?.altitude || 420) * 1000;
+  }, [position?.altitude]);
+
   const toggleSound = () => {
     const muted = soundEffects.toggleMute();
     setIsAudioMuted(muted);
@@ -191,7 +205,7 @@ export default function ISSMap({
   };
 
   return (
-    <div className="relative w-full h-[500px] md:h-[600px] lg:h-[650px] rounded-3xl overflow-hidden border-2 border-slate-200/90 shadow-2xl bg-slate-50">
+    <div className="relative w-full h-[520px] md:h-[620px] lg:h-[660px] rounded-3xl overflow-hidden border-2 border-slate-200/90 shadow-2xl bg-slate-50">
       <MapContainer
         center={coordinates}
         zoom={3}
@@ -211,7 +225,23 @@ export default function ISSMap({
 
         <MapController position={position} isFollowing={isFollowing} />
 
-        {/* 1. Future Predicted Orbit Track (Amber / Gold Dotted Line) */}
+        {/* 1. Ground Footprint Horizon Circle */}
+        {showFootprint && position && (
+          <Circle
+            center={coordinates}
+            radius={footprintRadiusMeters}
+            pathOptions={{
+              color: '#0284c7',
+              weight: 1.5,
+              opacity: 0.4,
+              fillColor: '#38bdf8',
+              fillOpacity: 0.08,
+              dashArray: '4, 4'
+            }}
+          />
+        )}
+
+        {/* 2. Future Predicted Orbit Track (Amber / Gold Dotted Line) */}
         {showPredictedOrbit &&
           predictedOrbitSegments.map((segment, idx) => (
             <Polyline
@@ -220,7 +250,7 @@ export default function ISSMap({
               pathOptions={{
                 color: '#f59e0b',
                 weight: 2.5,
-                opacity: 0.65,
+                opacity: 0.7,
                 dashArray: '8, 8',
                 lineCap: 'round',
                 lineJoin: 'round'
@@ -228,7 +258,7 @@ export default function ISSMap({
             />
           ))}
 
-        {/* 2. Recorded Session Flight Trail (Vibrant Sky Blue Line) */}
+        {/* 3. Recorded Session Flight Trail (Sky Blue Solid Line) */}
         {isTrailVisible &&
           trailSegments.map((segment, idx) => (
             <Polyline
@@ -244,7 +274,7 @@ export default function ISSMap({
             />
           ))}
 
-        {/* 3. Trail Historical Breadcrumb Dots */}
+        {/* 4. Trail Historical Breadcrumb Dots */}
         {isTrailVisible &&
           trail.slice(0, -1).map((pt, i) => (
             <CircleMarker
@@ -260,7 +290,30 @@ export default function ISSMap({
             />
           ))}
 
-        {/* 4. Current ISS Position Marker */}
+        {/* 5. Subsolar Zenith Point Marker (Where Sun is Directly Overhead) */}
+        {position?.solar_lat !== null && position?.solar_lat !== undefined && (
+          <CircleMarker
+            center={[position.solar_lat, position.solar_lon]}
+            radius={7}
+            pathOptions={{
+              color: '#d97706',
+              fillColor: '#fbbf24',
+              fillOpacity: 0.9,
+              weight: 2
+            }}
+          >
+            <Popup closeButton={false}>
+              <div className="text-xs p-1 font-sans">
+                <span className="font-bold text-amber-700 block">☀️ Subsolar Zenith Point</span>
+                <span className="text-[11px] text-slate-600 font-mono">
+                  {formatLatitude(position.solar_lat)}, {formatLongitude(position.solar_lon)}
+                </span>
+              </div>
+            </Popup>
+          </CircleMarker>
+        )}
+
+        {/* 6. Current ISS Position Marker with True Bearing Rotation */}
         {position && (
           <Marker ref={markerRef} position={coordinates} icon={issIcon}>
             <Popup className="custom-iss-popup-light" closeButton={true}>
@@ -297,8 +350,8 @@ export default function ISSMap({
                     <span className="font-mono font-bold text-sky-700">{formatAltitude(position.altitude)}</span>
                   </div>
                   <div className="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Velocity</span>
-                    <span className="font-mono font-bold text-sky-700">{formatVelocity(position.velocity)}</span>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Heading</span>
+                    <span className="font-mono font-bold text-slate-800">{Math.round(headingBearing)}° N</span>
                   </div>
                 </div>
 
@@ -350,7 +403,25 @@ export default function ISSMap({
           }`}
         >
           <Orbit className="w-4 h-4 text-amber-500" />
-          <span>{showPredictedOrbit ? 'Next Orbit Visible' : 'Next Orbit Hidden'}</span>
+          <span>{showPredictedOrbit ? 'Next Orbit (90m)' : 'Next Orbit Hidden'}</span>
+        </button>
+
+        {/* Footprint Coverage Toggle */}
+        <button
+          type="button"
+          id="btn-toggle-footprint"
+          onClick={() => {
+            soundEffects.playClick();
+            setShowFootprint(!showFootprint);
+          }}
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-bold backdrop-blur-md transition-all border-2 ${
+            showFootprint
+              ? 'bg-sky-50 text-sky-900 border-sky-300 shadow-md'
+              : 'bg-white/95 text-slate-600 border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          <Compass className="w-4 h-4 text-sky-500" />
+          <span>{showFootprint ? 'Footprint Circle' : 'Footprint Off'}</span>
         </button>
 
         {/* Trail Toggle */}
@@ -373,7 +444,7 @@ export default function ISSMap({
 
         {/* Map Layer Switcher */}
         <div className="flex rounded-2xl overflow-hidden border-2 border-slate-200 bg-white/95 shadow-md p-1 gap-1">
-          {Object.entries(MAP_LAYERS).map(([key, layer]) => (
+          {Object.entries(MAP_LAYERS).map(([key]) => (
             <button
               key={key}
               type="button"
@@ -416,6 +487,8 @@ export default function ISSMap({
             <span>{formatLatitude(position?.latitude)}</span>
             <span className="text-slate-300">,</span>
             <span>{formatLongitude(position?.longitude)}</span>
+            <span className="text-slate-300">|</span>
+            <span className="font-bold text-sky-700">{Math.round(headingBearing)}°</span>
           </div>
         </div>
       </div>

@@ -9,6 +9,8 @@ import LastUpdated from '@/components/LastUpdated';
 import MovementTrail from '@/components/MovementTrail';
 import PassCalculator from '@/components/PassCalculator';
 import CrewPanel from '@/components/CrewPanel';
+import PhysicsEnginePanel from '@/components/PhysicsEnginePanel';
+import VideoBackground from '@/components/VideoBackground';
 import ErrorState from '@/components/ErrorState';
 import LoadingState from '@/components/LoadingState';
 import Footer from '@/components/Footer';
@@ -30,12 +32,14 @@ import {
   Award,
   ShieldCheck,
   Compass,
-  Users
+  Users,
+  Activity
 } from 'lucide-react';
 import { getGeographicRegion } from '@/lib/geocoding';
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('tracker'); // 'tracker' | 'sighting' | 'crew'
+  const [activeTab, setActiveTab] = useState('tracker'); // 'tracker' | 'sighting' | 'physics' | 'crew'
+  const [overlayTheme, setOverlayTheme] = useState('pearl'); // 'pearl' | 'crystal' | 'cinema'
 
   const {
     currentPosition,
@@ -70,8 +74,14 @@ export default function Home() {
     : { name: 'Earth Orbit', flag: '🌍' };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-slate-900 font-sans selection:bg-sky-100 selection:text-sky-800 relative">
-      {/* 1. Header with navigation tabs & decals */}
+    <div className="min-h-screen flex flex-col font-sans selection:bg-sky-100 selection:text-sky-800 relative">
+      {/* 1. Full-Screen 4K Background Video & Frosted Glass Overlay */}
+      <VideoBackground
+        overlayTheme={overlayTheme}
+        onChangeTheme={setOverlayTheme}
+      />
+
+      {/* 2. Header with Navigation Tabs & Decals */}
       <DashboardHeader
         status={status}
         isDemo={isDemo}
@@ -85,10 +95,10 @@ export default function Home() {
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 relative z-10">
         {/* Notice Banners for Stale / Demo Data */}
         {isDemo && (
-          <div className="rounded-2xl bg-amber-50 border-2 border-amber-300 p-4 flex items-center justify-between gap-3 text-amber-900 text-xs shadow-sm">
+          <div className="rounded-2xl bg-amber-50/95 backdrop-blur-md border-2 border-amber-300 p-4 flex items-center justify-between gap-3 text-amber-900 text-xs shadow-md">
             <div className="flex items-center gap-2.5">
               <Sparkles className="w-5 h-5 shrink-0 text-amber-500 animate-spin-slow" />
               <span>
@@ -106,7 +116,7 @@ export default function Home() {
         )}
 
         {isStale && !isDemo && (
-          <div className="rounded-2xl bg-amber-50 border-2 border-amber-300 p-4 flex items-center justify-between gap-3 text-amber-900 text-xs shadow-sm">
+          <div className="rounded-2xl bg-amber-50/95 backdrop-blur-md border-2 border-amber-300 p-4 flex items-center justify-between gap-3 text-amber-900 text-xs shadow-md">
             <div className="flex items-center gap-2.5">
               <AlertTriangle className="w-5 h-5 shrink-0 text-amber-500 animate-pulse" />
               <div>
@@ -123,8 +133,8 @@ export default function Home() {
           </div>
         )}
 
-        {/* 2. Hero Mission Overview with Space Stickers & Doodles */}
-        <div className="relative bg-gradient-to-r from-sky-50/70 via-indigo-50/40 to-blue-50/60 rounded-3xl p-6 md:p-8 border-2 border-slate-200/80 shadow-md overflow-hidden">
+        {/* 3. Hero Mission Overview with Space Stickers & Doodles */}
+        <div className="relative bg-white/90 backdrop-blur-md rounded-3xl p-6 md:p-8 border-2 border-slate-200/90 shadow-xl overflow-hidden">
           {/* Playful Floating Space Stickers in corners */}
           <div className="absolute -top-3 -right-2 hidden sm:block">
             <AstronautSticker size={84} />
@@ -146,7 +156,7 @@ export default function Home() {
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-4">
               Currently flying over{' '}
-              <strong className="text-slate-900 font-bold bg-white px-2 py-0.5 rounded-lg border border-slate-200 inline-flex items-center gap-1 shadow-sm">
+              <strong className="text-slate-900 font-bold bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-200 inline-flex items-center gap-1 shadow-sm">
                 <span>{currentRegion.flag}</span>
                 <span>{currentRegion.name}</span>
               </strong>{' '}
@@ -183,7 +193,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 3. Conditional State Views */}
+        {/* 4. Conditional State Views */}
         {isInitialLoading ? (
           <div className="py-16">
             <LoadingState />
@@ -198,7 +208,7 @@ export default function Home() {
           </div>
         ) : (
           <>
-            {/* View 1: Main Tracker (Map + Telemetry Grid + Trail) */}
+            {/* Tab 1: Main Flight Tracker */}
             {activeTab === 'tracker' && (
               <div className="space-y-6">
                 {/* Telemetry Metric Cards */}
@@ -255,16 +265,23 @@ export default function Home() {
               </div>
             )}
 
-            {/* View 2: Sighting & Distance Radar */}
+            {/* Tab 2: Sighting & Distance Radar */}
             {activeTab === 'sighting' && (
               <div className="space-y-6">
                 <PassCalculator issPosition={currentPosition} />
-                {/* Also show telemetry grid below calculator for reference */}
                 <TelemetryGrid position={currentPosition} isStale={isStale} />
               </div>
             )}
 
-            {/* View 3: Expedition 72 Crew on Board */}
+            {/* Tab 3: Orbital Physics & Solar Cycle */}
+            {activeTab === 'physics' && (
+              <div className="space-y-6">
+                <PhysicsEnginePanel position={currentPosition} />
+                <TelemetryGrid position={currentPosition} isStale={isStale} />
+              </div>
+            )}
+
+            {/* Tab 4: Expedition 72 Crew on Board */}
             {activeTab === 'crew' && (
               <div className="space-y-6">
                 <CrewPanel />
@@ -275,7 +292,7 @@ export default function Home() {
         )}
       </main>
 
-      {/* 4. Footer */}
+      {/* 5. Footer */}
       <Footer />
     </div>
   );

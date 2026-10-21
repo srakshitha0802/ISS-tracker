@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Satellite, RefreshCw, Sparkles, Orbit, Radio, Compass, Users } from 'lucide-react';
+import { Satellite, RefreshCw, Sparkles, Orbit, Radio, Compass, Users, Activity } from 'lucide-react';
 import ConnectionStatus from './ConnectionStatus';
 import { AstronautSticker, RocketSticker } from './SpaceStickers';
 import { soundEffects } from '@/lib/audio';
@@ -18,10 +18,10 @@ export default function DashboardHeader({
   onToggleSimulation
 }) {
   return (
-    <header className="border-b-2 border-slate-200/80 bg-white/95 backdrop-blur-md sticky top-0 z-40 shadow-sm">
+    <header className="border-b-2 border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-40 shadow-sm transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          {/* Left Branding with Cute Space Stickers */}
+          {/* Left Branding with Space Stickers */}
           <div className="flex items-center gap-3">
             <div className="relative">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 via-blue-600 to-indigo-600 p-0.5 shadow-lg shadow-sky-200 flex items-center justify-center">
@@ -29,7 +29,6 @@ export default function DashboardHeader({
                   <Satellite className="w-6 h-6 text-sky-600 animate-pulse" />
                 </div>
               </div>
-              {/* Floating mini sticker on top of logo */}
               <div className="absolute -top-2 -right-2">
                 <RocketSticker size={24} />
               </div>
@@ -53,8 +52,8 @@ export default function DashboardHeader({
             </div>
           </div>
 
-          {/* Center Navigation Tabs for Advanced Features */}
-          <div className="flex items-center bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200 gap-1">
+          {/* Center Navigation Tabs */}
+          <div className="flex items-center bg-slate-100/90 p-1 rounded-2xl border border-slate-200 gap-1 overflow-x-auto">
             <button
               type="button"
               id="tab-tracker"
@@ -62,14 +61,14 @@ export default function DashboardHeader({
                 soundEffects.playClick();
                 onSelectTab('tracker');
               }}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
                 activeTab === 'tracker'
                   ? 'bg-white text-slate-900 shadow-sm border border-slate-200/80'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <Orbit className="w-3.5 h-3.5 text-sky-500" />
-              <span>Live Tracker</span>
+              <span>Flight Track</span>
             </button>
 
             <button
@@ -79,14 +78,31 @@ export default function DashboardHeader({
                 soundEffects.playClick();
                 onSelectTab('sighting');
               }}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
                 activeTab === 'sighting'
                   ? 'bg-white text-slate-900 shadow-sm border border-slate-200/80'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <Compass className="w-3.5 h-3.5 text-amber-500" />
-              <span>Distance & Sightings</span>
+              <span>Distance Radar</span>
+            </button>
+
+            <button
+              type="button"
+              id="tab-physics"
+              onClick={() => {
+                soundEffects.playClick();
+                onSelectTab('physics');
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                activeTab === 'physics'
+                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200/80'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Activity className="w-3.5 h-3.5 text-purple-500" />
+              <span>Solar & Physics</span>
             </button>
 
             <button
@@ -96,7 +112,7 @@ export default function DashboardHeader({
                 soundEffects.playClick();
                 onSelectTab('crew');
               }}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
                 activeTab === 'crew'
                   ? 'bg-white text-slate-900 shadow-sm border border-slate-200/80'
                   : 'text-slate-600 hover:text-slate-900'
