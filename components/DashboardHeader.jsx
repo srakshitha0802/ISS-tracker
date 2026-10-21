@@ -22,7 +22,7 @@ export default function DashboardHeader({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex flex-wrap items-center justify-between gap-4">
           {/* Left Branding with Sharp Aerospace ISS Logo */}
-          <ISSLogo size="md" />
+          <ISSLogo size="md" onClick={() => onSelectTab('tracker')} />
 
           {/* Center Navigation Tabs - Sharp HUD Design */}
           <div className="flex items-center bg-slate-950/90 p-1 rounded-none border border-cyan-500/30 gap-1 overflow-x-auto shadow-inner">

@@ -5,7 +5,6 @@ const repoName = 'ISS-tracker';
 const nextConfig = {
   output: isGithubPages ? 'export' : undefined,
   basePath: isGithubPages ? `/${repoName}` : '',
-  assetPrefix: isGithubPages ? `/${repoName}/` : '',
   images: {
     unoptimized: true,
   },

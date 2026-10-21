@@ -1,6 +1,9 @@
 import './globals.css';
 
+const siteUrl = 'https://srakshitha0802.github.io/ISS-tracker';
+
 export const metadata = {
+  metadataBase: new URL(siteUrl),
   title: 'ISS Tracker — Live Space Station Tracker',
   description:
     'Track the International Space Station (ISS) in real time on an interactive world map. View live latitude, longitude, altitude, orbital velocity, ground distance radar, and flight path trajectory.',
@@ -14,7 +17,38 @@ export const metadata = {
     'Expedition 72',
     'Orbital Mechanics'
   ],
-  authors: [{ name: 'Edzul Development Challenge Team' }]
+  authors: [{ name: 'Edzul Development Challenge Team' }],
+  icons: {
+    icon: [
+      { url: `${siteUrl}/icon.svg`, type: 'image/svg+xml' },
+      { url: `${siteUrl}/logo.png`, sizes: '1254x1254', type: 'image/png' }
+    ],
+    apple: [
+      { url: `${siteUrl}/logo.png`, sizes: '180x180', type: 'image/png' }
+    ]
+  },
+  openGraph: {
+    title: 'ISS Tracker — Live Space Station Tracker',
+    description: 'Track the International Space Station (ISS) in real time on an interactive world map. Live telemetry, trajectory prediction, and distance radar.',
+    url: siteUrl,
+    siteName: 'ISS Tracker',
+    images: [
+      {
+        url: `${siteUrl}/logo.png`,
+        width: 1254,
+        height: 1254,
+        alt: 'ISS Tracker Official Aerospace Emblem'
+      }
+    ],
+    locale: 'en_US',
+    type: 'website'
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ISS Tracker — Live Space Station Tracker',
+    description: 'Track the International Space Station (ISS) in real time on an interactive world map.',
+    images: [`${siteUrl}/logo.png`]
+  }
 };
 
 export const viewport = {

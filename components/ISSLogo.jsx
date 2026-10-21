@@ -1,21 +1,54 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useId } from 'react';
+import { getAssetPath } from '@/lib/basePath';
+import { soundEffects } from '@/lib/audio';
 
 /**
  * ISS Tracker Precision Aerospace Emblem & Logo
- * Designed with sharp HUD geometry, dual-axis photovoltaic arrays,
- * orbital trajectory vector arc, and mission control typography.
+ * Features official circular mission patch emblem with cybernetic HUD brackets,
+ * resilient SVG vector fallback with unique IDs, and interactive navigation.
  */
-export default function ISSLogo({ size = 'md', className = '', showSubtext = true }) {
+export default function ISSLogo({
+  size = 'md',
+  className = '',
+  showSubtext = true,
+  onClick
+}) {
+  const [imageError, setImageError] = useState(false);
+  const id = useId();
+
   const isSm = size === 'sm';
   const isLg = size === 'lg';
 
   const badgeSize = isSm ? 'w-9 h-9' : isLg ? 'w-14 h-14' : 'w-11 h-11';
-  const iconSize = isSm ? 'w-6 h-6' : isLg ? 'w-9 h-9' : 'w-7 h-7';
+  const iconSize = isSm ? 'w-7 h-7' : isLg ? 'w-11 h-11' : 'w-8 h-8';
+
+  const handleClick = (e) => {
+    soundEffects.playClick();
+    if (onClick) {
+      onClick(e);
+    } else if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClick(e);
+    }
+  };
 
   return (
-    <div className={`flex items-center gap-3 select-none group cursor-pointer ${className}`}>
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      title="ISS Tracker — Return to Live Telemetry"
+      className={`flex items-center gap-3 select-none group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 transition-transform active:scale-[0.98] ${className}`}
+    >
       {/* Sharp Aerospace Flight Insignia */}
       <div className="relative shrink-0">
         <div
@@ -27,102 +60,93 @@ export default function ISSLogo({ size = 'md', className = '', showSubtext = tru
           <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-cyan-300 pointer-events-none" />
           <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-cyan-300 pointer-events-none" />
 
-          {/* High-Precision ISS Vector SVG */}
-          <svg
-            viewBox="0 0 64 64"
-            className={`${iconSize} transition-transform duration-500 group-hover:scale-105`}
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              {/* Solar Array Cyan Glow Gradient */}
-              <linearGradient id="solarGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#0284c7" stopOpacity="0.3" />
-              </linearGradient>
-              {/* Core Truss Gradient */}
-              <linearGradient id="trussGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#22d3ee" />
-                <stop offset="50%" stopColor="#f8fafc" />
-                <stop offset="100%" stopColor="#22d3ee" />
-              </linearGradient>
-              {/* Orbital Arc Gradient */}
-              <linearGradient id="orbitArc" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.1" />
-                <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.9" />
-                <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.2" />
-              </linearGradient>
-            </defs>
-
-            {/* Elliptical Orbital Vector Ring */}
-            <ellipse
-              cx="32"
-              cy="32"
-              rx="28"
-              ry="11"
-              transform="rotate(-26 32 32)"
-              stroke="url(#orbitArc)"
-              strokeWidth="1.5"
-              strokeDasharray="4 3"
-              className="opacity-75 group-hover:opacity-100"
+          {/* Official Mission Emblem Image or Precision Vector Fallback */}
+          {!imageError ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={getAssetPath('/logo.png')}
+              alt="ISS Tracker Official Aerospace Emblem"
+              width={64}
+              height={64}
+              onError={() => setImageError(true)}
+              className={`${iconSize} object-cover rounded-full shadow-[0_0_10px_rgba(6,182,212,0.5)] transition-transform duration-500 group-hover:scale-105`}
             />
+          ) : (
+            /* High-Precision ISS Vector SVG Fallback */
+            <svg
+              viewBox="0 0 64 64"
+              className={`${iconSize} transition-transform duration-500 group-hover:scale-105`}
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <linearGradient id={`${id}-solarGlow`} x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#0284c7" stopOpacity="0.3" />
+                </linearGradient>
+                <linearGradient id={`${id}-trussGrad`} x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#22d3ee" />
+                  <stop offset="50%" stopColor="#f8fafc" />
+                  <stop offset="100%" stopColor="#22d3ee" />
+                </linearGradient>
+                <linearGradient id={`${id}-orbitArc`} x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.1" />
+                  <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.2" />
+                </linearGradient>
+              </defs>
 
-            {/* Main Integrated Truss Structure (ITS) */}
-            <line x1="8" y1="32" x2="56" y2="32" stroke="url(#trussGrad)" strokeWidth="2.2" strokeLinecap="square" />
-            
-            {/* Cross Struts on Truss */}
-            <line x1="20" y1="30" x2="20" y2="34" stroke="#22d3ee" strokeWidth="1.2" />
-            <line x1="44" y1="30" x2="44" y2="34" stroke="#22d3ee" strokeWidth="1.2" />
+              <ellipse
+                cx="32"
+                cy="32"
+                rx="28"
+                ry="11"
+                transform="rotate(-26 32 32)"
+                stroke={`url(#${id}-orbitArc)`}
+                strokeWidth="1.5"
+                strokeDasharray="4 3"
+                className="opacity-75 group-hover:opacity-100"
+              />
 
-            {/* Left Solar Array Panels (Port) */}
-            {/* Mast */}
-            <line x1="14" y1="14" x2="14" y2="50" stroke="#94a3b8" strokeWidth="1.5" />
-            {/* Upper Wing */}
-            <rect x="9" y="15" width="10" height="13" fill="url(#solarGlow)" stroke="#38bdf8" strokeWidth="0.8" />
-            <line x1="9" y1="19.5" x2="19" y2="19.5" stroke="#0ea5e9" strokeWidth="0.5" />
-            <line x1="9" y1="24" x2="19" y2="24" stroke="#0ea5e9" strokeWidth="0.5" />
-            <line x1="14" y1="15" x2="14" y2="28" stroke="#38bdf8" strokeWidth="0.8" />
-            {/* Lower Wing */}
-            <rect x="9" y="36" width="10" height="13" fill="url(#solarGlow)" stroke="#38bdf8" strokeWidth="0.8" />
-            <line x1="9" y1="40.5" x2="19" y2="40.5" stroke="#0ea5e9" strokeWidth="0.5" />
-            <line x1="9" y1="45" x2="19" y2="45" stroke="#0ea5e9" strokeWidth="0.5" />
-            <line x1="14" y1="36" x2="14" y2="49" stroke="#38bdf8" strokeWidth="0.8" />
+              <line x1="8" y1="32" x2="56" y2="32" stroke={`url(#${id}-trussGrad)`} strokeWidth="2.2" strokeLinecap="square" />
+              <line x1="20" y1="30" x2="20" y2="34" stroke="#22d3ee" strokeWidth="1.2" />
+              <line x1="44" y1="30" x2="44" y2="34" stroke="#22d3ee" strokeWidth="1.2" />
 
-            {/* Right Solar Array Panels (Starboard) */}
-            {/* Mast */}
-            <line x1="50" y1="14" x2="50" y2="50" stroke="#94a3b8" strokeWidth="1.5" />
-            {/* Upper Wing */}
-            <rect x="45" y="15" width="10" height="13" fill="url(#solarGlow)" stroke="#38bdf8" strokeWidth="0.8" />
-            <line x1="45" y1="19.5" x2="55" y2="19.5" stroke="#0ea5e9" strokeWidth="0.5" />
-            <line x1="45" y1="24" x2="55" y2="24" stroke="#0ea5e9" strokeWidth="0.5" />
-            <line x1="50" y1="15" x2="50" y2="28" stroke="#38bdf8" strokeWidth="0.8" />
-            {/* Lower Wing */}
-            <rect x="45" y="36" width="10" height="13" fill="url(#solarGlow)" stroke="#38bdf8" strokeWidth="0.8" />
-            <line x1="45" y1="40.5" x2="55" y2="40.5" stroke="#0ea5e9" strokeWidth="0.5" />
-            <line x1="45" y1="45" x2="55" y2="45" stroke="#0ea5e9" strokeWidth="0.5" />
-            <line x1="50" y1="36" x2="50" y2="49" stroke="#38bdf8" strokeWidth="0.8" />
+              {/* Port Arrays */}
+              <line x1="14" y1="14" x2="14" y2="50" stroke="#94a3b8" strokeWidth="1.5" />
+              <rect x="9" y="15" width="10" height="13" fill={`url(#${id}-solarGlow)`} stroke="#38bdf8" strokeWidth="0.8" />
+              <line x1="9" y1="19.5" x2="19" y2="19.5" stroke="#0ea5e9" strokeWidth="0.5" />
+              <line x1="9" y1="24" x2="19" y2="24" stroke="#0ea5e9" strokeWidth="0.5" />
+              <line x1="14" y1="15" x2="14" y2="28" stroke="#38bdf8" strokeWidth="0.8" />
+              <rect x="9" y="36" width="10" height="13" fill={`url(#${id}-solarGlow)`} stroke="#38bdf8" strokeWidth="0.8" />
+              <line x1="9" y1="40.5" x2="19" y2="40.5" stroke="#0ea5e9" strokeWidth="0.5" />
+              <line x1="9" y1="45" x2="19" y2="45" stroke="#0ea5e9" strokeWidth="0.5" />
+              <line x1="14" y1="36" x2="14" y2="49" stroke="#38bdf8" strokeWidth="0.8" />
 
-            {/* Pressurized Modules Complex (Center Stack) */}
-            {/* Longitudinal Module Stack (Zvezda / Zarya / Unity / Destiny) */}
-            <rect x="28" y="21" width="8" height="22" fill="#0f172a" stroke="#22d3ee" strokeWidth="1.4" />
-            <line x1="28" y1="26" x2="36" y2="26" stroke="#06b6d4" strokeWidth="0.8" />
-            <line x1="28" y1="32" x2="36" y2="32" stroke="#22d3ee" strokeWidth="1" />
-            <line x1="28" y1="38" x2="36" y2="38" stroke="#06b6d4" strokeWidth="0.8" />
+              {/* Starboard Arrays */}
+              <line x1="50" y1="14" x2="50" y2="50" stroke="#94a3b8" strokeWidth="1.5" />
+              <rect x="45" y="15" width="10" height="13" fill={`url(#${id}-solarGlow)`} stroke="#38bdf8" strokeWidth="0.8" />
+              <line x1="45" y1="19.5" x2="55" y2="19.5" stroke="#0ea5e9" strokeWidth="0.5" />
+              <line x1="45" y1="24" x2="55" y2="24" stroke="#0ea5e9" strokeWidth="0.5" />
+              <line x1="50" y1="15" x2="50" y2="28" stroke="#38bdf8" strokeWidth="0.8" />
+              <rect x="45" y="36" width="10" height="13" fill={`url(#${id}-solarGlow)`} stroke="#38bdf8" strokeWidth="0.8" />
+              <line x1="45" y1="40.5" x2="55" y2="40.5" stroke="#0ea5e9" strokeWidth="0.5" />
+              <line x1="45" y1="45" x2="55" y2="45" stroke="#0ea5e9" strokeWidth="0.5" />
+              <line x1="50" y1="36" x2="50" y2="49" stroke="#38bdf8" strokeWidth="0.8" />
 
-            {/* Transverse Lab Modules (Columbus / Kibo JEM) */}
-            <rect x="23" y="28.5" width="18" height="7" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.2" />
-            
-            {/* Cupola Nadir Earth Observation Viewport */}
-            <circle cx="32" cy="32" r="2.2" fill="#38bdf8" />
-            <circle cx="32" cy="32" r="1" fill="#ffffff" />
-
-            {/* Communications Dish Array */}
-            <path d="M 23 25 Q 21 21 24 19" stroke="#f59e0b" strokeWidth="1.2" fill="none" />
-            <circle cx="24" cy="19" r="1" fill="#f59e0b" />
-
-            {/* Active Telemetry Beacon Signal Point */}
-            <circle cx="32" cy="19" r="1.5" fill="#22d3ee" className="animate-ping" />
-          </svg>
+              {/* Pressurized Modules */}
+              <rect x="28" y="21" width="8" height="22" fill="#0f172a" stroke="#22d3ee" strokeWidth="1.4" />
+              <line x1="28" y1="26" x2="36" y2="26" stroke="#06b6d4" strokeWidth="0.8" />
+              <line x1="28" y1="32" x2="36" y2="32" stroke="#22d3ee" strokeWidth="1" />
+              <line x1="28" y1="38" x2="36" y2="38" stroke="#06b6d4" strokeWidth="0.8" />
+              <rect x="23" y="28.5" width="18" height="7" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.2" />
+              <circle cx="32" cy="32" r="2.2" fill="#38bdf8" />
+              <circle cx="32" cy="32" r="1" fill="#ffffff" />
+              <path d="M 23 25 Q 21 21 24 19" stroke="#f59e0b" strokeWidth="1.2" fill="none" />
+              <circle cx="24" cy="19" r="1" fill="#f59e0b" />
+              <circle cx="32" cy="19" r="1.5" fill="#22d3ee" className="animate-ping" />
+            </svg>
+          )}
 
           {/* Exterior Corner Active Pulse LED */}
           <div className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
