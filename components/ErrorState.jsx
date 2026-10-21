@@ -2,19 +2,20 @@
 
 import React from 'react';
 import { AlertOctagon, RefreshCw, Eye, WifiOff } from 'lucide-react';
+import { AstronautSticker } from './SpaceStickers';
 
 export default function ErrorState({ errorMessage, onRetry, onLoadDemo }) {
   return (
-    <div className="rounded-2xl border border-rose-900/60 bg-gradient-to-b from-rose-950/40 to-slate-950 p-6 md:p-8 text-center max-w-xl mx-auto shadow-2xl backdrop-blur-md">
-      <div className="w-14 h-14 rounded-full bg-rose-500/10 border border-rose-500/30 flex items-center justify-center mx-auto mb-4 text-rose-400">
-        <WifiOff className="w-7 h-7" />
+    <div className="rounded-3xl border-2 border-rose-200 bg-white/95 p-8 text-center max-w-xl mx-auto shadow-2xl backdrop-blur-md">
+      <div className="w-16 h-16 rounded-2xl bg-rose-50 border-2 border-rose-200 flex items-center justify-center mx-auto mb-4 text-rose-500 shadow-sm">
+        <WifiOff className="w-8 h-8" />
       </div>
 
-      <h2 className="text-lg font-bold text-slate-100 mb-2">
+      <h2 className="text-xl font-black text-slate-900 mb-2">
         Telemetry Downlink Interrupted
       </h2>
 
-      <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+      <p className="text-xs text-slate-600 mb-6 leading-relaxed max-w-md mx-auto">
         {errorMessage || 'Unable to establish a connection with the Where The ISS At? public satellite tracking API. This can happen due to temporary network disruptions or API rate limiting.'}
       </p>
 
@@ -23,7 +24,7 @@ export default function ErrorState({ errorMessage, onRetry, onLoadDemo }) {
           type="button"
           id="btn-error-retry"
           onClick={onRetry}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-cyan-600 hover:bg-cyan-500 text-white shadow-[0_0_15px_rgba(56,189,248,0.3)] transition-all cursor-pointer"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-bold bg-sky-500 hover:bg-sky-600 text-white shadow-md shadow-sky-200 transition-all cursor-pointer active:scale-95"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           <span>Retry Connection</span>
@@ -34,16 +35,16 @@ export default function ErrorState({ errorMessage, onRetry, onLoadDemo }) {
             type="button"
             id="btn-error-demo"
             onClick={onLoadDemo}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-amber-300 border border-amber-500/40 transition-all cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border-2 border-amber-300 transition-all cursor-pointer active:scale-95 shadow-sm"
           >
-            <Eye className="w-3.5 h-3.5 text-amber-400" />
+            <Eye className="w-3.5 h-3.5 text-amber-600" />
             <span>View Demo Telemetry</span>
           </button>
         )}
       </div>
 
-      <p className="mt-4 text-[11px] text-slate-500">
-        Demo mode allows you to inspect the interface layout without mistaking simulated telemetry for live data.
+      <p className="mt-6 text-[11px] text-slate-400">
+        Demo mode allows you to inspect the full interface layout without waiting for external API connectivity.
       </p>
     </div>
   );

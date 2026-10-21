@@ -1,8 +1,10 @@
 'use client';
 
 import React from 'react';
-import { Satellite, RefreshCw, Sparkles, Orbit, Radio } from 'lucide-react';
+import { Satellite, RefreshCw, Sparkles, Orbit, Radio, Compass, Users } from 'lucide-react';
 import ConnectionStatus from './ConnectionStatus';
+import { AstronautSticker, RocketSticker } from './SpaceStickers';
+import { soundEffects } from '@/lib/audio';
 
 export default function DashboardHeader({
   status,
@@ -10,84 +12,146 @@ export default function DashboardHeader({
   isManualRefreshing = false,
   canManualRefresh = true,
   isSimulationMode = false,
+  activeTab = 'tracker',
+  onSelectTab,
   onRefresh,
   onToggleSimulation
 }) {
   return (
-    <header className="border-b border-cyan-950/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
-        {/* Left Branding */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-500 p-0.5 shadow-[0_0_15px_rgba(56,189,248,0.35)] flex items-center justify-center">
-            <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-              <Satellite className="w-5 h-5 text-cyan-400 animate-pulse" />
+    <header className="border-b-2 border-slate-200/80 bg-white/95 backdrop-blur-md sticky top-0 z-40 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          {/* Left Branding with Cute Space Stickers */}
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 via-blue-600 to-indigo-600 p-0.5 shadow-lg shadow-sky-200 flex items-center justify-center">
+                <div className="w-full h-full bg-white rounded-[14px] flex items-center justify-center">
+                  <Satellite className="w-6 h-6 text-sky-600 animate-pulse" />
+                </div>
+              </div>
+              {/* Floating mini sticker on top of logo */}
+              <div className="absolute -top-2 -right-2">
+                <RocketSticker size={24} />
+              </div>
             </div>
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                ISS Tracker
-                <span className="hidden sm:inline text-xs font-normal text-slate-400">
-                  — Live Space Station Tracker
+
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-center gap-1.5">
+                  ISS Tracker
+                  <span className="hidden sm:inline text-xs font-bold text-sky-600 bg-sky-50 px-2 py-0.5 rounded-full border border-sky-200">
+                    Live
+                  </span>
+                </h1>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  NORAD #25544
                 </span>
-              </h1>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
-                NORAD #25544
-              </span>
+              </div>
+              <p className="text-xs text-slate-500 font-medium">
+                Live Space Station Telemetry & Interactive Orbital Science Dashboard
+              </p>
             </div>
-            <p className="text-[11px] text-slate-400">
-              International Space Station Orbital Telemetry & Real-Time Geospatial Tracking
-            </p>
           </div>
-        </div>
 
-        {/* Right Status & Action Controls */}
-        <div className="flex items-center flex-wrap gap-2.5">
-          {/* Connection Status Pill */}
-          <ConnectionStatus
-            status={status}
-            isDemo={isDemo}
-            isUpdating={isManualRefreshing || status === 'UPDATING'}
-          />
+          {/* Center Navigation Tabs for Advanced Features */}
+          <div className="flex items-center bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200 gap-1">
+            <button
+              type="button"
+              id="tab-tracker"
+              onClick={() => {
+                soundEffects.playClick();
+                onSelectTab('tracker');
+              }}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                activeTab === 'tracker'
+                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200/80'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Orbit className="w-3.5 h-3.5 text-sky-500" />
+              <span>Live Tracker</span>
+            </button>
 
-          {/* Simulation Toggle Button for Testing / Demo */}
-          <button
-            type="button"
-            id="btn-toggle-simulation"
-            onClick={onToggleSimulation}
-            title={
-              isSimulationMode
-                ? 'Switch back to live Where The ISS At? API stream'
-                : 'Simulate API failure and test demo data fallback'
-            }
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-all ${
-              isSimulationMode
-                ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 hover:bg-amber-500/30'
-                : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700'
-            }`}
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{isSimulationMode ? 'Exit Demo' : 'Simulate Demo'}</span>
-          </button>
+            <button
+              type="button"
+              id="tab-sighting"
+              onClick={() => {
+                soundEffects.playClick();
+                onSelectTab('sighting');
+              }}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                activeTab === 'sighting'
+                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200/80'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Compass className="w-3.5 h-3.5 text-amber-500" />
+              <span>Distance & Sightings</span>
+            </button>
 
-          {/* Manual Refresh Button with Rate-Limit Cooldown Protection */}
-          <button
-            type="button"
-            id="btn-manual-refresh"
-            onClick={onRefresh}
-            disabled={!canManualRefresh || isManualRefreshing}
-            aria-label="Refresh ISS telemetry immediately"
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
-              canManualRefresh && !isManualRefreshing
-                ? 'bg-cyan-600 hover:bg-cyan-500 text-white border-cyan-400/50 shadow-[0_0_15px_rgba(56,189,248,0.25)] cursor-pointer'
-                : 'bg-slate-800 text-slate-500 border-slate-700 cursor-not-allowed opacity-70'
-            }`}
-          >
-            <RefreshCw
-              className={`w-3.5 h-3.5 ${isManualRefreshing ? 'animate-spin' : ''}`}
+            <button
+              type="button"
+              id="tab-crew"
+              onClick={() => {
+                soundEffects.playClick();
+                onSelectTab('crew');
+              }}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                activeTab === 'crew'
+                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200/80'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Crew (7)</span>
+            </button>
+          </div>
+
+          {/* Right Status & Action Controls */}
+          <div className="flex items-center flex-wrap gap-2.5">
+            <ConnectionStatus
+              status={status}
+              isDemo={isDemo}
+              isUpdating={isManualRefreshing || status === 'UPDATING'}
             />
-            <span>{isManualRefreshing ? 'Refreshing' : 'Refresh'}</span>
-          </button>
+
+            {/* Simulation Toggle */}
+            <button
+              type="button"
+              id="btn-toggle-simulation"
+              onClick={() => {
+                soundEffects.playClick();
+                onToggleSimulation();
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-2xl text-xs font-bold border transition-all ${
+                isSimulationMode
+                  ? 'bg-amber-100 text-amber-900 border-amber-300 shadow-sm'
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>{isSimulationMode ? 'Exit Demo' : 'Simulate Demo'}</span>
+            </button>
+
+            {/* Manual Refresh Button */}
+            <button
+              type="button"
+              id="btn-manual-refresh"
+              onClick={() => {
+                soundEffects.playQuindarBeep();
+                onRefresh();
+              }}
+              disabled={!canManualRefresh || isManualRefreshing}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-2xl text-xs font-extrabold border transition-all ${
+                canManualRefresh && !isManualRefreshing
+                  ? 'bg-sky-500 hover:bg-sky-600 text-white border-sky-400 shadow-md shadow-sky-200 cursor-pointer active:scale-95'
+                  : 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+              }`}
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isManualRefreshing ? 'animate-spin' : ''}`} />
+              <span>{isManualRefreshing ? 'Updating...' : 'Refresh'}</span>
+            </button>
+          </div>
         </div>
       </div>
     </header>

@@ -3,7 +3,7 @@
 import React from 'react';
 
 /**
- * Reusable Metric Card for Mission Control Telemetry
+ * Reusable Metric Card for Modern Mission Control (Light/White Aesthetic)
  */
 export default function TelemetryCard({
   title,
@@ -17,31 +17,32 @@ export default function TelemetryCard({
   tooltip
 }) {
   const badgeStyles = {
-    default: 'bg-slate-800 text-slate-300 border-slate-700',
-    cyan: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
-    amber: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
-    indigo: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
-    emerald: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+    default: 'bg-slate-100 text-slate-700 border-slate-200',
+    cyan: 'bg-sky-100 text-sky-800 border-sky-300',
+    amber: 'bg-amber-100 text-amber-800 border-amber-300',
+    indigo: 'bg-indigo-100 text-indigo-800 border-indigo-300',
+    emerald: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+    rose: 'bg-rose-100 text-rose-800 border-rose-300'
   };
 
   return (
     <div
-      className={`group relative rounded-2xl p-4 transition-all duration-300 border ${
+      className={`group relative rounded-3xl p-5 transition-all duration-300 border-2 ${
         highlight
-          ? 'bg-gradient-to-br from-slate-900/90 to-cyan-950/40 border-cyan-500/50 shadow-[0_0_20px_rgba(56,189,248,0.15)]'
-          : 'bg-slate-900/70 hover:bg-slate-900/90 border-slate-800/80 hover:border-slate-700 shadow-lg'
-      } backdrop-blur-md flex flex-col justify-between`}
+          ? 'bg-gradient-to-br from-white via-sky-50/60 to-blue-50/80 border-sky-400 shadow-xl shadow-sky-100/60 hover:-translate-y-1'
+          : 'bg-white hover:bg-slate-50/80 border-slate-200/90 hover:border-slate-300 shadow-lg shadow-slate-100 hover:-translate-y-1'
+      } flex flex-col justify-between`}
       title={tooltip}
     >
       {/* Top Header: Title & Icon/Badge */}
       <div className="flex items-start justify-between gap-2 mb-2">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 group-hover:text-slate-300 transition-colors">
+        <span className="text-xs font-black uppercase tracking-wider text-slate-500 group-hover:text-slate-700 transition-colors">
           {title}
         </span>
         <div className="flex items-center gap-1.5">
           {badge && (
             <span
-              className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${
+              className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                 badgeStyles[badgeVariant] || badgeStyles.default
               }`}
             >
@@ -49,7 +50,7 @@ export default function TelemetryCard({
             </span>
           )}
           {Icon && (
-            <div className="p-1.5 rounded-lg bg-slate-800/80 border border-slate-700/60 text-cyan-400 group-hover:text-cyan-300 group-hover:scale-105 transition-all">
+            <div className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-sky-600 group-hover:bg-sky-500 group-hover:text-white transition-all shadow-sm">
               <Icon className="w-4 h-4" />
             </div>
           )}
@@ -59,11 +60,11 @@ export default function TelemetryCard({
       {/* Main Metric Value & Unit */}
       <div className="my-1">
         <div className="flex items-baseline gap-1.5">
-          <span className="font-mono text-2xl md:text-3xl font-bold tracking-tight text-slate-100 group-hover:text-cyan-200 transition-colors">
+          <span className="font-mono text-2xl md:text-3xl font-black tracking-tight text-slate-900 group-hover:text-sky-600 transition-colors">
             {value}
           </span>
           {unit && (
-            <span className="font-mono text-xs font-medium text-slate-400">
+            <span className="font-mono text-xs font-bold text-slate-500">
               {unit}
             </span>
           )}
@@ -72,7 +73,7 @@ export default function TelemetryCard({
 
       {/* Bottom Subvalue / Helper Text */}
       {subvalue && (
-        <div className="mt-2 pt-2 border-t border-slate-800/60 text-[11px] text-slate-400 flex items-center justify-between">
+        <div className="mt-3 pt-2.5 border-t border-slate-100 text-[11px] font-semibold text-slate-500 flex items-center justify-between">
           <span>{subvalue}</span>
         </div>
       )}

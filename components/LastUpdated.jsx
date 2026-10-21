@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Clock, Radio, Timer } from 'lucide-react';
+import { Clock, Radio, Timer, Sun, Moon } from 'lucide-react';
 import { formatTimestamp, formatRelativeTime } from '@/lib/formatters';
 
 export default function LastUpdated({
@@ -13,7 +13,6 @@ export default function LastUpdated({
 }) {
   const [, setTick] = useState(0);
 
-  // Re-render every second so the relative time counter stays live
   useEffect(() => {
     const timer = setInterval(() => {
       setTick((t) => t + 1);
@@ -22,15 +21,15 @@ export default function LastUpdated({
   }, []);
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-400">
+    <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 rounded-2xl bg-white/95 border-2 border-slate-200/90 text-xs font-semibold text-slate-600 shadow-md">
       <div className="flex items-center gap-2">
-        <Clock className={`w-3.5 h-3.5 ${isStale ? 'text-amber-400' : 'text-cyan-400'}`} />
+        <Clock className={`w-4 h-4 ${isStale ? 'text-amber-500' : 'text-sky-500'}`} />
         <span>Last Polled:</span>
-        <span className="font-mono text-slate-200">
+        <span className="font-mono text-slate-900 font-bold">
           {lastSuccessTime ? formatRelativeTime(lastSuccessTime) : 'Pending...'}
         </span>
         {lastSuccessTime && (
-          <span className="hidden sm:inline font-mono text-slate-500">
+          <span className="hidden sm:inline font-mono text-slate-400">
             ({new Date(lastSuccessTime).toLocaleTimeString()})
           </span>
         )}
@@ -39,14 +38,14 @@ export default function LastUpdated({
       <div className="flex items-center gap-4">
         {observationTimestamp && (
           <div className="flex items-center gap-1.5 font-mono">
-            <Radio className="w-3.5 h-3.5 text-slate-500" />
-            <span className="text-slate-400">Telemetry Epoch:</span>
-            <span className="text-cyan-300">{formatTimestamp(observationTimestamp)}</span>
+            <Radio className="w-3.5 h-3.5 text-sky-500" />
+            <span className="text-slate-500 font-sans">Observation Epoch:</span>
+            <span className="text-slate-900 font-bold">{formatTimestamp(observationTimestamp)}</span>
           </div>
         )}
 
-        <div className="hidden md:flex items-center gap-1.5 font-mono text-slate-500">
-          <Timer className="w-3 h-3" />
+        <div className="hidden md:flex items-center gap-1.5 font-mono text-slate-400">
+          <Timer className="w-3.5 h-3.5" />
           <span>Cadence: {Math.round(intervalMs / 1000)}s</span>
         </div>
       </div>

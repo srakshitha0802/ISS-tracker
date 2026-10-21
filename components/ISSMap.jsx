@@ -1,61 +1,61 @@
 'use client';
 
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { Crosshair, Eye, EyeOff, Navigation, Compass } from 'lucide-react';
+import { Crosshair, Eye, EyeOff, Navigation, Compass, Layers, Orbit, Volume2, VolumeX } from 'lucide-react';
 import { formatLatitude, formatLongitude, formatAltitude, formatVelocity, formatTimestamp, formatVisibility } from '@/lib/formatters';
+import { predictFutureOrbit } from '@/lib/orbitCalculation';
+import { getGeographicRegion } from '@/lib/geocoding';
+import { soundEffects } from '@/lib/audio';
 
 // Custom Space Station SVG Icon
 const createISSIcon = (isDaylight = true) => {
-  const pulseColor = isDaylight ? '#38bdf8' : '#818cf8';
-  const glowColor = isDaylight ? 'rgba(56, 189, 248, 0.4)' : 'rgba(129, 140, 248, 0.4)';
+  const pulseColor = isDaylight ? '#0284c7' : '#6366f1';
+  const glowColor = isDaylight ? 'rgba(2, 132, 199, 0.4)' : 'rgba(99, 102, 241, 0.4)';
 
   const svgHtml = `
-    <div class="relative flex items-center justify-center" style="width: 52px; height: 52px;">
+    <div class="relative flex items-center justify-center select-none" style="width: 58px; height: 58px;">
       <!-- Pulsing Radar Ping Rings -->
-      <div class="absolute inset-0 rounded-full animate-ping opacity-60" style="background-color: ${glowColor}; animation-duration: 3s;"></div>
-      <div class="absolute inset-1 rounded-full border border-cyan-400/60 animate-pulse"></div>
+      <div class="absolute inset-0 rounded-full animate-ping opacity-60" style="background-color: ${glowColor}; animation-duration: 2.5s;"></div>
+      <div class="absolute inset-1 rounded-full border-2 border-sky-500/70 animate-pulse"></div>
 
       <!-- Station Core Silhouette Box -->
-      <div class="relative z-10 w-10 h-10 flex items-center justify-center bg-slate-950/90 rounded-full border-2 border-cyan-400 shadow-[0_0_15px_rgba(56,189,248,0.7)] backdrop-blur-sm">
-        <svg viewBox="0 0 32 32" fill="none" class="w-6 h-6 text-cyan-300" xmlns="http://www.w3.org/2000/svg">
+      <div class="relative z-10 w-11 h-11 flex items-center justify-center bg-white rounded-full border-2 border-sky-500 shadow-[0_4px_20px_rgba(2,132,199,0.5)] backdrop-blur-sm">
+        <svg viewBox="0 0 32 32" fill="none" class="w-7 h-7 text-sky-600" xmlns="http://www.w3.org/2000/svg">
           <!-- Solar Array Wings Left -->
-          <rect x="2" y="8" width="6" height="4" rx="1" fill="#38bdf8" fill-opacity="0.9" stroke="#0284c7" stroke-width="0.8"/>
-          <rect x="2" y="14" width="6" height="4" rx="1" fill="#38bdf8" fill-opacity="0.9" stroke="#0284c7" stroke-width="0.8"/>
-          <rect x="2" y="20" width="6" height="4" rx="1" fill="#38bdf8" fill-opacity="0.9" stroke="#0284c7" stroke-width="0.8"/>
-          <line x1="8" y1="16" x2="12" y2="16" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+          <rect x="2" y="7" width="6" height="5" rx="1.5" fill="#0284c7" stroke="#0369a1" stroke-width="0.8"/>
+          <rect x="2" y="13.5" width="6" height="5" rx="1.5" fill="#0284c7" stroke="#0369a1" stroke-width="0.8"/>
+          <rect x="2" y="20" width="6" height="5" rx="1.5" fill="#0284c7" stroke="#0369a1" stroke-width="0.8"/>
+          <line x1="8" y1="16" x2="12" y2="16" stroke="#64748b" stroke-width="1.8" stroke-linecap="round"/>
 
           <!-- Central Trusses & Hab Modules -->
-          <line x1="12" y1="16" x2="20" y2="16" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round"/>
-          <rect x="14" y="12" width="4" height="8" rx="1.5" fill="#f8fafc" stroke="#38bdf8" stroke-width="1"/>
-          <circle cx="16" cy="16" r="1.5" fill="#38bdf8"/>
+          <line x1="12" y1="16" x2="20" y2="16" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+          <rect x="14" y="11" width="4" height="10" rx="2" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+          <circle cx="16" cy="16" r="1.8" fill="#f59e0b"/>
 
           <!-- Solar Array Wings Right -->
-          <line x1="20" y1="16" x2="24" y2="16" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
-          <rect x="24" y="8" width="6" height="4" rx="1" fill="#38bdf8" fill-opacity="0.9" stroke="#0284c7" stroke-width="0.8"/>
-          <rect x="24" y="14" width="6" height="4" rx="1" fill="#38bdf8" fill-opacity="0.9" stroke="#0284c7" stroke-width="0.8"/>
-          <rect x="24" y="20" width="6" height="4" rx="1" fill="#38bdf8" fill-opacity="0.9" stroke="#0284c7" stroke-width="0.8"/>
+          <line x1="20" y1="16" x2="24" y2="16" stroke="#64748b" stroke-width="1.8" stroke-linecap="round"/>
+          <rect x="24" y="7" width="6" height="5" rx="1.5" fill="#0284c7" stroke="#0369a1" stroke-width="0.8"/>
+          <rect x="24" y="13.5" width="6" height="5" rx="1.5" fill="#0284c7" stroke="#0369a1" stroke-width="0.8"/>
+          <rect x="24" y="20" width="6" height="5" rx="1.5" fill="#0284c7" stroke="#0369a1" stroke-width="0.8"/>
         </svg>
       </div>
 
       <!-- Small Pointer Direction Arrow -->
-      <div class="absolute -bottom-1 z-20 w-2 h-2 bg-cyan-400 rotate-45 shadow-[0_0_6px_#38bdf8]"></div>
+      <div class="absolute -bottom-1.5 z-20 w-2.5 h-2.5 bg-sky-500 rotate-45 shadow-[0_0_8px_#0284c7]"></div>
     </div>
   `;
 
   return L.divIcon({
     html: svgHtml,
     className: 'custom-iss-leaflet-icon',
-    iconSize: [52, 52],
-    iconAnchor: [26, 26],
-    popupAnchor: [0, -28]
+    iconSize: [58, 58],
+    iconAnchor: [29, 29],
+    popupAnchor: [0, -32]
   });
 };
 
-/**
- * Helper hook to smooth-pan the map when coordinates change if follow mode is enabled.
- */
 function MapController({ position, isFollowing }) {
   const map = useMap();
   const prevPosRef = useRef(null);
@@ -68,13 +68,11 @@ function MapController({ position, isFollowing }) {
     const targetCoords = [position.latitude, position.longitude];
 
     if (!prevPosRef.current) {
-      // First position received: center with default zoom
       map.setView(targetCoords, map.getZoom() || 3, { animate: false });
       prevPosRef.current = targetCoords;
       return;
     }
 
-    // Only pan if follow mode is active
     if (isFollowing) {
       map.panTo(targetCoords, {
         animate: true,
@@ -89,10 +87,6 @@ function MapController({ position, isFollowing }) {
   return null;
 }
 
-/**
- * Splits continuous points across the International Date Line (-180° / +180° antimeridian)
- * to prevent drawing a horizontal line across the entire map canvas.
- */
 function splitTrailAtDateLine(trailPoints) {
   if (!trailPoints || trailPoints.length === 0) return [];
 
@@ -101,13 +95,14 @@ function splitTrailAtDateLine(trailPoints) {
 
   for (let i = 0; i < trailPoints.length; i++) {
     const pt = trailPoints[i];
-    const coords = [pt.latitude, pt.longitude];
+    const coords = Array.isArray(pt) ? pt : [pt.latitude, pt.longitude];
+    const lon = Array.isArray(pt) ? pt[1] : pt.longitude;
 
     if (currentSegment.length > 0) {
-      const prevPt = trailPoints[i - 1];
-      const lonDiff = Math.abs(pt.longitude - prevPt.longitude);
+      const prevCoords = currentSegment[currentSegment.length - 1];
+      const prevLon = prevCoords[1];
+      const lonDiff = Math.abs(lon - prevLon);
 
-      // If longitude jumps by more than 180 degrees, it has crossed the antimeridian
       if (lonDiff > 180) {
         segments.push(currentSegment);
         currentSegment = [];
@@ -124,6 +119,24 @@ function splitTrailAtDateLine(trailPoints) {
   return segments;
 }
 
+const MAP_LAYERS = {
+  voyager: {
+    name: 'Carto Voyager (Light)',
+    url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  },
+  osm: {
+    name: 'OpenStreetMap Standard',
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+  },
+  dark: {
+    name: 'Carto Dark Matter',
+    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  }
+};
+
 export default function ISSMap({
   position,
   trail = [],
@@ -134,12 +147,20 @@ export default function ISSMap({
   onClearTrail
 }) {
   const markerRef = useRef(null);
+  const [activeLayerKey, setActiveLayerKey] = useState('voyager');
+  const [showPredictedOrbit, setShowPredictedOrbit] = useState(true);
+  const [isAudioMuted, setIsAudioMuted] = useState(false);
 
   const coordinates = useMemo(() => {
     if (position && typeof position.latitude === 'number' && typeof position.longitude === 'number') {
       return [position.latitude, position.longitude];
     }
     return [0, 0];
+  }, [position]);
+
+  const regionInfo = useMemo(() => {
+    if (!position) return { name: 'Space', flag: '🛰️' };
+    return getGeographicRegion(position.latitude, position.longitude);
   }, [position]);
 
   const visibilityInfo = useMemo(() => {
@@ -150,113 +171,142 @@ export default function ISSMap({
     return createISSIcon(visibilityInfo.isDaylight);
   }, [visibilityInfo.isDaylight]);
 
-  // Split polyline at the international date line
+  // Trail segments split across Date Line
   const trailSegments = useMemo(() => {
     if (!isTrailVisible || trail.length < 2) return [];
     return splitTrailAtDateLine(trail);
   }, [trail, isTrailVisible]);
 
+  // Future 90-minute predicted orbit split across Date Line
+  const predictedOrbitSegments = useMemo(() => {
+    if (!showPredictedOrbit || !position || typeof position.latitude !== 'number') return [];
+    const points = predictFutureOrbit(position.latitude, position.longitude, 40);
+    return splitTrailAtDateLine(points);
+  }, [position, showPredictedOrbit]);
+
+  const toggleSound = () => {
+    const muted = soundEffects.toggleMute();
+    setIsAudioMuted(muted);
+    if (!muted) soundEffects.playClick();
+  };
+
   return (
-    <div className="relative w-full h-[480px] md:h-[580px] lg:h-[620px] rounded-2xl overflow-hidden border border-cyan-900/50 shadow-2xl bg-slate-950">
+    <div className="relative w-full h-[500px] md:h-[600px] lg:h-[650px] rounded-3xl overflow-hidden border-2 border-slate-200/90 shadow-2xl bg-slate-50">
       <MapContainer
         center={coordinates}
         zoom={3}
         minZoom={2}
-        maxZoom={10}
+        maxZoom={12}
         scrollWheelZoom={true}
         className="w-full h-full z-0"
         worldCopyJump={true}
       >
-        {/* CartoDB Dark Matter Tiles for authentic space mission control look */}
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noreferrer">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          key={activeLayerKey}
+          attribution={MAP_LAYERS[activeLayerKey].attribution}
+          url={MAP_LAYERS[activeLayerKey].url}
           subdomains="abcd"
           maxZoom={19}
         />
 
         <MapController position={position} isFollowing={isFollowing} />
 
-        {/* ISS Movement Trail Segments */}
-        {isTrailVisible &&
-          trailSegments.map((segment, idx) => (
+        {/* 1. Future Predicted Orbit Track (Amber / Gold Dotted Line) */}
+        {showPredictedOrbit &&
+          predictedOrbitSegments.map((segment, idx) => (
             <Polyline
-              key={`segment-${idx}-${segment.length}`}
+              key={`predicted-segment-${idx}`}
               positions={segment}
               pathOptions={{
-                color: '#38bdf8',
-                weight: 3,
-                opacity: 0.75,
-                dashArray: '6, 6',
+                color: '#f59e0b',
+                weight: 2.5,
+                opacity: 0.65,
+                dashArray: '8, 8',
                 lineCap: 'round',
                 lineJoin: 'round'
               }}
             />
           ))}
 
-        {/* Trail Historical Breadcrumb Dots */}
+        {/* 2. Recorded Session Flight Trail (Vibrant Sky Blue Line) */}
+        {isTrailVisible &&
+          trailSegments.map((segment, idx) => (
+            <Polyline
+              key={`trail-segment-${idx}-${segment.length}`}
+              positions={segment}
+              pathOptions={{
+                color: '#0284c7',
+                weight: 3.5,
+                opacity: 0.85,
+                lineCap: 'round',
+                lineJoin: 'round'
+              }}
+            />
+          ))}
+
+        {/* 3. Trail Historical Breadcrumb Dots */}
         {isTrailVisible &&
           trail.slice(0, -1).map((pt, i) => (
             <CircleMarker
               key={`trail-pt-${pt.timestamp}-${i}`}
               center={[pt.latitude, pt.longitude]}
-              radius={3}
+              radius={3.5}
               pathOptions={{
-                color: '#0284c7',
+                color: '#0369a1',
                 fillColor: '#38bdf8',
-                fillOpacity: 0.6,
-                weight: 1
+                fillOpacity: 0.7,
+                weight: 1.5
               }}
             />
           ))}
 
-        {/* Current ISS Position Marker */}
+        {/* 4. Current ISS Position Marker */}
         {position && (
-          <Marker
-            ref={markerRef}
-            position={coordinates}
-            icon={issIcon}
-          >
-            <Popup className="custom-iss-popup" closeButton={true}>
-              <div className="p-1 min-w-[220px] text-slate-100 font-sans">
-                <div className="flex items-center justify-between border-b border-cyan-800/60 pb-1.5 mb-2">
+          <Marker ref={markerRef} position={coordinates} icon={issIcon}>
+            <Popup className="custom-iss-popup-light" closeButton={true}>
+              <div className="p-1 min-w-[240px] text-slate-800 font-sans">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2 mb-2.5">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                    <span className="font-bold text-xs uppercase tracking-wider text-cyan-300">
+                    <span className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse"></span>
+                    <span className="font-extrabold text-xs uppercase tracking-wider text-slate-900">
                       ISS (ZARYA) #25544
                     </span>
                   </div>
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${
-                    visibilityInfo.isDaylight
-                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                      : 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-                  }`}>
+                  <span
+                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
+                      visibilityInfo.isDaylight
+                        ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                        : 'bg-indigo-100 text-indigo-800 border border-indigo-300'
+                    }`}
+                  >
                     {visibilityInfo.label}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div>
-                    <span className="text-[10px] text-slate-400 uppercase block">Latitude</span>
-                    <span className="font-mono text-cyan-200">{formatLatitude(position.latitude)}</span>
+                  <div className="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Latitude</span>
+                    <span className="font-mono font-bold text-slate-800">{formatLatitude(position.latitude)}</span>
                   </div>
-                  <div>
-                    <span className="text-[10px] text-slate-400 uppercase block">Longitude</span>
-                    <span className="font-mono text-cyan-200">{formatLongitude(position.longitude)}</span>
+                  <div className="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Longitude</span>
+                    <span className="font-mono font-bold text-slate-800">{formatLongitude(position.longitude)}</span>
                   </div>
-                  <div>
-                    <span className="text-[10px] text-slate-400 uppercase block">Altitude</span>
-                    <span className="font-mono text-slate-200">{formatAltitude(position.altitude)}</span>
+                  <div className="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Altitude</span>
+                    <span className="font-mono font-bold text-sky-700">{formatAltitude(position.altitude)}</span>
                   </div>
-                  <div>
-                    <span className="text-[10px] text-slate-400 uppercase block">Velocity</span>
-                    <span className="font-mono text-slate-200">{formatVelocity(position.velocity)}</span>
+                  <div className="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Velocity</span>
+                    <span className="font-mono font-bold text-sky-700">{formatVelocity(position.velocity)}</span>
                   </div>
                 </div>
 
-                <div className="mt-2 pt-1.5 border-t border-slate-800 text-[10px] text-slate-400 flex items-center justify-between">
-                  <span>Recorded:</span>
-                  <span className="font-mono text-slate-300">{formatTimestamp(position.timestamp)}</span>
+                <div className="mt-2.5 pt-2 border-t border-slate-100 text-[11px] text-slate-500 flex items-center justify-between">
+                  <span>Region:</span>
+                  <span className="font-bold text-slate-800">
+                    {regionInfo.flag} {regionInfo.name}
+                  </span>
                 </div>
               </div>
             </Popup>
@@ -264,62 +314,109 @@ export default function ISSMap({
         )}
       </MapContainer>
 
-      {/* Map Control Floating Toolbar (Top Right) */}
+      {/* Floating Toolbar (Top Right) */}
       <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2 pointer-events-auto">
-        {/* Follow ISS Toggle Button */}
+        {/* Follow ISS Button */}
         <button
           type="button"
           id="btn-follow-iss"
-          onClick={onToggleFollow}
-          aria-label={isFollowing ? 'Disable automatic map tracking' : 'Enable automatic map tracking'}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold backdrop-blur-md transition-all duration-200 shadow-lg border ${
+          onClick={() => {
+            soundEffects.playClick();
+            onToggleFollow();
+          }}
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-bold backdrop-blur-md transition-all duration-200 shadow-lg border-2 ${
             isFollowing
-              ? 'bg-cyan-500/20 text-cyan-200 border-cyan-400/60 shadow-[0_0_15px_rgba(56,189,248,0.25)]'
-              : 'bg-slate-900/80 text-slate-400 border-slate-700/60 hover:text-slate-200 hover:border-slate-500'
+              ? 'bg-sky-500 text-white border-sky-400 shadow-sky-200'
+              : 'bg-white/95 text-slate-700 border-slate-200 hover:bg-slate-100'
           }`}
         >
-          <Crosshair className={`w-4 h-4 ${isFollowing ? 'text-cyan-400 animate-spin-slow' : 'text-slate-400'}`} />
+          <Crosshair className={`w-4 h-4 ${isFollowing ? 'animate-spin-slow' : 'text-slate-400'}`} />
           <span>{isFollowing ? 'Tracking ISS' : 'Follow ISS'}</span>
-          <span className={`w-2 h-2 rounded-full ${isFollowing ? 'bg-cyan-400 animate-ping' : 'bg-slate-600'}`} />
+          <span className={`w-2 h-2 rounded-full ${isFollowing ? 'bg-white animate-ping' : 'bg-slate-400'}`} />
         </button>
 
-        {/* Trail Visibility Toggle Button */}
+        {/* Future Orbit Projection Toggle */}
+        <button
+          type="button"
+          id="btn-toggle-orbit"
+          onClick={() => {
+            soundEffects.playClick();
+            setShowPredictedOrbit(!showPredictedOrbit);
+          }}
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-bold backdrop-blur-md transition-all border-2 ${
+            showPredictedOrbit
+              ? 'bg-amber-50 text-amber-900 border-amber-300 shadow-md'
+              : 'bg-white/95 text-slate-600 border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          <Orbit className="w-4 h-4 text-amber-500" />
+          <span>{showPredictedOrbit ? 'Next Orbit Visible' : 'Next Orbit Hidden'}</span>
+        </button>
+
+        {/* Trail Toggle */}
         <button
           type="button"
           id="btn-toggle-trail"
-          onClick={onToggleTrail}
-          aria-label={isTrailVisible ? 'Hide orbital trail' : 'Show orbital trail'}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold backdrop-blur-md transition-all duration-200 shadow-lg border ${
+          onClick={() => {
+            soundEffects.playClick();
+            onToggleTrail();
+          }}
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-bold backdrop-blur-md transition-all border-2 ${
             isTrailVisible
-              ? 'bg-slate-800/80 text-cyan-300 border-cyan-500/40'
-              : 'bg-slate-900/80 text-slate-400 border-slate-700/60 hover:text-slate-200'
+              ? 'bg-sky-50 text-sky-900 border-sky-300 shadow-md'
+              : 'bg-white/95 text-slate-600 border-slate-200 hover:bg-slate-50'
           }`}
         >
-          {isTrailVisible ? <Eye className="w-4 h-4 text-cyan-400" /> : <EyeOff className="w-4 h-4 text-slate-400" />}
-          <span>{isTrailVisible ? 'Trail Visible' : 'Trail Hidden'}</span>
+          {isTrailVisible ? <Eye className="w-4 h-4 text-sky-600" /> : <EyeOff className="w-4 h-4 text-slate-400" />}
+          <span>{isTrailVisible ? 'Trail Shown' : 'Trail Hidden'}</span>
         </button>
 
-        {/* Trail Clear Button */}
-        {trail.length > 0 && (
-          <button
-            type="button"
-            id="btn-clear-trail"
-            onClick={onClearTrail}
-            aria-label="Clear recorded movement trail"
-            className="flex items-center justify-center px-3 py-1.5 rounded-lg text-[11px] font-medium bg-slate-900/80 text-slate-400 hover:text-rose-300 hover:bg-rose-950/40 border border-slate-800 hover:border-rose-800/60 backdrop-blur-md transition-all"
-          >
-            Clear Trail ({trail.length})
-          </button>
-        )}
+        {/* Map Layer Switcher */}
+        <div className="flex rounded-2xl overflow-hidden border-2 border-slate-200 bg-white/95 shadow-md p-1 gap-1">
+          {Object.entries(MAP_LAYERS).map(([key, layer]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => {
+                soundEffects.playClick();
+                setActiveLayerKey(key);
+              }}
+              className={`px-2.5 py-1 rounded-xl text-[10px] font-bold transition-all ${
+                activeLayerKey === key
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              {key === 'voyager' ? 'Voyager' : key === 'osm' ? 'Standard' : 'Dark'}
+            </button>
+          ))}
+        </div>
+
+        {/* Audio Mute/Unmute */}
+        <button
+          type="button"
+          onClick={toggleSound}
+          title={isAudioMuted ? 'Unmute mission control audio pings' : 'Mute audio'}
+          className="self-end p-2 rounded-2xl bg-white/95 text-slate-700 hover:text-sky-600 border-2 border-slate-200 shadow-md transition-all"
+        >
+          {isAudioMuted ? <VolumeX className="w-4 h-4 text-slate-400" /> : <Volume2 className="w-4 h-4 text-sky-500" />}
+        </button>
       </div>
 
-      {/* Map Live Coordinates Overlay (Bottom Left) */}
-      <div className="absolute bottom-4 left-4 z-[1000] pointer-events-none">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-950/85 backdrop-blur-md border border-cyan-900/60 text-xs font-mono text-cyan-300 shadow-lg">
-          <Compass className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-          <span>{formatLatitude(position?.latitude)}</span>
-          <span className="text-slate-600">|</span>
-          <span>{formatLongitude(position?.longitude)}</span>
+      {/* Live Region & Coordinate Pill (Bottom Left) */}
+      <div className="absolute bottom-4 left-4 z-[1000] pointer-events-auto">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 p-2.5 rounded-2xl bg-white/95 backdrop-blur-md border-2 border-slate-200 text-xs font-semibold text-slate-800 shadow-xl">
+          <div className="flex items-center gap-1.5 font-bold text-sky-700">
+            <span className="text-base">{regionInfo.flag}</span>
+            <span>{regionInfo.name}</span>
+          </div>
+          <span className="hidden sm:inline text-slate-300">|</span>
+          <div className="font-mono text-[11px] text-slate-600 flex items-center gap-1.5">
+            <Compass className="w-3.5 h-3.5 text-sky-500" />
+            <span>{formatLatitude(position?.latitude)}</span>
+            <span className="text-slate-300">,</span>
+            <span>{formatLongitude(position?.longitude)}</span>
+          </div>
         </div>
       </div>
     </div>
