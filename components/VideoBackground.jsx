@@ -3,6 +3,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Play, Pause, Film, Eye, Sparkles } from 'lucide-react';
 import { soundEffects } from '@/lib/audio';
+import { getAssetPath } from '@/lib/basePath';
 
 export default function VideoBackground({
   overlayTheme = 'cinema',
@@ -72,7 +73,7 @@ export default function VideoBackground({
       <div className="fixed inset-0 w-full h-full z-0 overflow-hidden pointer-events-none select-none">
         <video
           ref={videoRef}
-          src="/gemini_generated_video_0a46d2c2.mp4"
+          src={getAssetPath('/gemini_generated_video_0a46d2c2.mp4')}
           autoPlay
           loop
           muted

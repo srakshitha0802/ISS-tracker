@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
 import { validateISSPositionPayload } from '@/lib/validation';
+import { getSampleISSData } from '@/lib/sampleData';
+
+export const dynamic = 'force-static';
+export const revalidate = false;
 
 const PRIMARY_API_URL = 'https://api.wheretheiss.at/v1/satellites/25544';
 
@@ -13,8 +17,7 @@ export async function GET() {
       headers: {
         'Accept': 'application/json',
         'User-Agent': 'ISSTracker-EdzulChallenge/1.0'
-      },
-      cache: 'no-store'
+      }
     });
 
     clearTimeout(timeoutId);
@@ -59,16 +62,16 @@ export async function GET() {
         }
       }
     );
-  } catch (err) {
+  } catch {
     clearTimeout(timeoutId);
-    const isTimeout = err.name === 'AbortError';
     return NextResponse.json(
       {
-        error: isTimeout
-          ? 'Upstream API request timed out after 6 seconds.'
-          : (err.message || 'Failed to fetch ISS telemetry from upstream API.')
+        ...getSampleISSData(),
+        isDemo: true,
+        source: 'build-fallback',
+        fetchedAt: Date.now()
       },
-      { status: isTimeout ? 504 : 500, headers: { 'Cache-Control': 'no-store' } }
+      { status: 200 }
     );
   }
 }

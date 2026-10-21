@@ -1,8 +1,23 @@
+const isGithubPages = process.env.GITHUB_PAGES === 'true';
+const repoName = 'ISS-tracker';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  output: isGithubPages ? 'export' : undefined,
+  basePath: isGithubPages ? `/${repoName}` : '',
+  assetPrefix: isGithubPages ? `/${repoName}/` : '',
+  images: {
+    unoptimized: true,
+  },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isGithubPages ? `/${repoName}` : '',
+  },
+  ...(isGithubPages
+    ? {}
+    : {
+        cacheComponents: true,
+        partialPrefetching: true,
+      }),
   turbopack: {
     rules: {
       "*.css": {
