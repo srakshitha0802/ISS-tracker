@@ -220,16 +220,16 @@ export function SparkleDoodle({ className = '', size = 24 }) {
  */
 export function MissionDecalBadge({ icon: Icon, title, subtitle, color = 'blue' }) {
   const styles = {
-    blue: 'bg-sky-50 text-sky-800 border-sky-300 shadow-sky-100 hover:border-sky-400',
-    rose: 'bg-rose-50 text-rose-800 border-rose-300 shadow-rose-100 hover:border-rose-400',
-    amber: 'bg-amber-50 text-amber-800 border-amber-300 shadow-amber-100 hover:border-amber-400',
-    emerald: 'bg-emerald-50 text-emerald-800 border-emerald-300 shadow-emerald-100 hover:border-emerald-400',
-    purple: 'bg-purple-50 text-purple-800 border-purple-300 shadow-purple-100 hover:border-purple-400'
+    blue: 'bg-cyan-500/15 text-cyan-200 border-cyan-400/40 shadow-[0_4px_16px_rgba(6,182,212,0.15)] hover:border-cyan-400 backdrop-blur-md',
+    rose: 'bg-rose-500/15 text-rose-200 border-rose-400/40 shadow-[0_4px_16px_rgba(244,63,94,0.15)] hover:border-rose-400 backdrop-blur-md',
+    amber: 'bg-amber-500/15 text-amber-200 border-amber-400/40 shadow-[0_4px_16px_rgba(245,158,11,0.15)] hover:border-amber-400 backdrop-blur-md',
+    emerald: 'bg-emerald-500/15 text-emerald-200 border-emerald-400/40 shadow-[0_4px_16px_rgba(16,185,129,0.15)] hover:border-emerald-400 backdrop-blur-md',
+    purple: 'bg-purple-500/15 text-purple-200 border-purple-400/40 shadow-[0_4px_16px_rgba(168,85,247,0.15)] hover:border-purple-400 backdrop-blur-md'
   };
 
   return (
     <div
-      className={`flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border-2 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-default select-none ${styles[color]}`}
+      className={`flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-default select-none ${styles[color]}`}
     >
       {Icon && <Icon className="w-5 h-5 shrink-0" />}
       <div className="leading-tight">

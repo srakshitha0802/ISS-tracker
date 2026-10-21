@@ -39,7 +39,7 @@ import { getGeographicRegion } from '@/lib/geocoding';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('tracker'); // 'tracker' | 'sighting' | 'physics' | 'crew'
-  const [overlayTheme, setOverlayTheme] = useState('pearl'); // 'pearl' | 'crystal' | 'cinema'
+  const [overlayTheme, setOverlayTheme] = useState('cinema'); // 'cinema' | 'vivid' | 'focus'
 
   const {
     currentPosition,
@@ -71,10 +71,10 @@ export default function Home() {
 
   const currentRegion = currentPosition
     ? getGeographicRegion(currentPosition.latitude, currentPosition.longitude)
-    : { name: 'Earth Orbit', flag: '🌍' };
+    : { name: 'Earth Orbit' };
 
   return (
-    <div className="min-h-screen flex flex-col font-sans selection:bg-sky-100 selection:text-sky-800 relative">
+    <div className="min-h-screen flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200 relative">
       {/* 1. Full-Screen 4K Background Video & Frosted Glass Overlay */}
       <VideoBackground
         overlayTheme={overlayTheme}
@@ -98,9 +98,9 @@ export default function Home() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 relative z-10">
         {/* Notice Banners for Stale / Demo Data */}
         {isDemo && (
-          <div className="rounded-2xl bg-amber-50/95 backdrop-blur-md border-2 border-amber-300 p-4 flex items-center justify-between gap-3 text-amber-900 text-xs shadow-md">
+          <div className="rounded-2xl bg-amber-950/50 backdrop-blur-xl border border-amber-500/40 p-4 flex items-center justify-between gap-3 text-amber-200 text-xs shadow-lg">
             <div className="flex items-center gap-2.5">
-              <Sparkles className="w-5 h-5 shrink-0 text-amber-500 animate-spin-slow" />
+              <Sparkles className="w-5 h-5 shrink-0 text-amber-400 animate-spin-slow" />
               <span>
                 <strong>DEMO DATA ACTIVE:</strong> You are viewing synthetic offline telemetry. Real movement tracking is paused.
               </span>
@@ -108,7 +108,7 @@ export default function Home() {
             <button
               type="button"
               onClick={toggleSimulationMode}
-              className="px-3.5 py-1.5 rounded-xl bg-amber-200 hover:bg-amber-300 font-bold border border-amber-400 transition-colors shrink-0 shadow-sm"
+              className="px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 font-bold border border-amber-500/40 transition-colors shrink-0 shadow-sm"
             >
               Resume Live API
             </button>
@@ -116,9 +116,9 @@ export default function Home() {
         )}
 
         {isStale && !isDemo && (
-          <div className="rounded-2xl bg-amber-50/95 backdrop-blur-md border-2 border-amber-300 p-4 flex items-center justify-between gap-3 text-amber-900 text-xs shadow-md">
+          <div className="rounded-2xl bg-amber-950/50 backdrop-blur-xl border border-amber-500/40 p-4 flex items-center justify-between gap-3 text-amber-200 text-xs shadow-lg">
             <div className="flex items-center gap-2.5">
-              <AlertTriangle className="w-5 h-5 shrink-0 text-amber-500 animate-pulse" />
+              <AlertTriangle className="w-5 h-5 shrink-0 text-amber-400 animate-pulse" />
               <div>
                 <strong>STALE DATA:</strong> Telemetry refresh temporarily delayed ({error || 'Connection timed out'}). Showing last confirmed position.
               </div>
@@ -134,7 +134,7 @@ export default function Home() {
         )}
 
         {/* 3. Hero Mission Overview with Space Stickers & Doodles */}
-        <div className="relative bg-white/90 backdrop-blur-md rounded-3xl p-6 md:p-8 border-2 border-slate-200/90 shadow-xl overflow-hidden">
+        <div className="relative bg-slate-950/65 backdrop-blur-2xl rounded-3xl p-6 md:p-8 border border-white/15 shadow-2xl overflow-hidden">
           {/* Playful Floating Space Stickers in corners */}
           <div className="absolute -top-3 -right-2 hidden sm:block">
             <AstronautSticker size={84} />
@@ -147,20 +147,20 @@ export default function Home() {
           </div>
 
           <div className="relative z-10 max-w-2xl">
-            <div className="flex items-center gap-2 text-sky-700 text-xs font-black tracking-wider uppercase mb-1.5">
-              <Orbit className="w-4 h-4 text-sky-600 animate-spin-slow" />
+            <div className="flex items-center gap-2 text-cyan-400 text-xs font-black tracking-wider uppercase mb-1.5">
+              <Orbit className="w-4 h-4 text-cyan-400 animate-spin-slow" />
               <span>International Space Station • 420km LEO Orbit</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-tight mb-2">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-2">
               Live Satellite Orbital Tracking & Vector Telemetry
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-4">
+            <p className="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed mb-4">
               Currently flying over{' '}
-              <strong className="text-slate-900 font-bold bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-200 inline-flex items-center gap-1 shadow-sm">
-                <span>{currentRegion.flag}</span>
+              <strong className="text-white font-bold bg-white/10 px-2.5 py-0.5 rounded-lg border border-white/15 inline-flex items-center gap-1.5 shadow-sm">
+                <Globe className="w-3.5 h-3.5 text-cyan-400" />
                 <span>{currentRegion.name}</span>
               </strong>{' '}
-              at approximately <strong>27,600 km/h</strong>.
+              at approximately <strong className="text-white">27,600 km/h</strong>.
             </p>
 
             {/* Playful Mission Decal Stickers */}
@@ -220,13 +220,13 @@ export default function Home() {
                 <section aria-label="Interactive Orbital Map" className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-sky-600" />
-                      <span className="text-xs font-black uppercase tracking-wider text-slate-700">
+                      <Globe className="w-4 h-4 text-cyan-400" />
+                      <span className="text-xs font-black uppercase tracking-wider text-slate-200">
                         Orbital Ground Track & Future Trajectory
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                      <span className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping"></span>
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
+                      <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
                       <span>Auto-panning {isFollowing ? 'Active' : 'Paused'}</span>
                     </div>
                   </div>

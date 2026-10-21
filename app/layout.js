@@ -21,13 +21,13 @@ export const viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#ffffff'
+  themeColor: '#020617'
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="h-full">
-      <body className="min-h-full flex flex-col bg-white text-slate-900 selection:bg-sky-500/20 selection:text-sky-700 antialiased">
+    <html lang="en" className="h-full dark">
+      <body className="min-h-full flex flex-col bg-transparent text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-200 antialiased">
         {children}
       </body>
     </html>

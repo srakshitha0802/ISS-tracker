@@ -8,9 +8,7 @@ import {
   Gauge,
   Sun,
   Moon,
-  Radio,
-  Zap,
-  Clock
+  Radio
 } from 'lucide-react';
 import TelemetryCard from './TelemetryCard';
 import {
@@ -30,11 +28,11 @@ export default function TelemetryGrid({ position, isStale = false }) {
         {[...Array(6)].map((_, i) => (
           <div
             key={i}
-            className="h-32 rounded-3xl bg-slate-100 border-2 border-slate-200 animate-pulse flex flex-col justify-between p-5"
+            className="h-32 rounded-3xl bg-slate-950/60 border border-white/10 animate-pulse flex flex-col justify-between p-5 backdrop-blur-xl"
           >
-            <div className="h-3 w-16 bg-slate-200 rounded-full"></div>
-            <div className="h-7 w-24 bg-slate-200 rounded-full"></div>
-            <div className="h-2 w-20 bg-slate-200 rounded-full"></div>
+            <div className="h-3 w-16 bg-slate-800 rounded-full"></div>
+            <div className="h-7 w-24 bg-slate-800 rounded-full"></div>
+            <div className="h-2 w-20 bg-slate-800 rounded-full"></div>
           </div>
         ))}
       </div>
