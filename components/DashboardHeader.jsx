@@ -93,6 +93,23 @@ export default function DashboardHeader({
               <Users className="w-3.5 h-3.5 text-sky-400" />
               <span>Crew (7)</span>
             </button>
+
+            <button
+              type="button"
+              id="tab-copilot"
+              onClick={() => {
+                soundEffects.playQuindarBeep();
+                onSelectTab('copilot');
+              }}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-none text-xs font-mono font-bold uppercase tracking-wider transition-all shrink-0 ${
+                activeTab === 'copilot'
+                  ? 'bg-indigo-500/30 text-indigo-200 border border-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.4)]'
+                  : 'text-indigo-300 hover:text-white hover:bg-indigo-950/40 border border-indigo-500/30'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
+              <span>DeepSeek AI</span>
+            </button>
           </div>
 
           {/* Right Status & Action Controls - Sharp HUD Controls */}

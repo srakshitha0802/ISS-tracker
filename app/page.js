@@ -11,6 +11,7 @@ import PassCalculator from '@/components/PassCalculator';
 import CrewPanel from '@/components/CrewPanel';
 import PhysicsEnginePanel from '@/components/PhysicsEnginePanel';
 import VideoBackground from '@/components/VideoBackground';
+import DeepSeekCopilot from '@/components/DeepSeekCopilot';
 import ErrorState from '@/components/ErrorState';
 import LoadingState from '@/components/LoadingState';
 import Footer from '@/components/Footer';
@@ -27,12 +28,13 @@ import {
   ShieldCheck,
   Compass,
   Users,
-  Activity
+  Activity,
+  Bot
 } from 'lucide-react';
 import { getGeographicRegion } from '@/lib/geocoding';
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('tracker'); // 'tracker' | 'sighting' | 'physics' | 'crew'
+  const [activeTab, setActiveTab] = useState('tracker'); // 'tracker' | 'sighting' | 'physics' | 'crew' | 'copilot'
   const [overlayTheme, setOverlayTheme] = useState('cinema'); // 'cinema' | 'vivid' | 'focus'
 
   const {
@@ -178,6 +180,19 @@ export default function Home() {
                 subtitle="Active Since 1998"
                 color="emerald"
               />
+
+              {/* Direct DeepSeek AI Copilot Trigger */}
+              <button
+                type="button"
+                id="btn-hero-launch-deepseek"
+                onClick={() => {
+                  setActiveTab('copilot');
+                }}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-none bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 border border-indigo-500/40 font-bold text-xs uppercase tracking-wider transition-all shadow-[0_0_12px_rgba(99,102,241,0.25)] hover:border-indigo-300 cursor-pointer active:scale-95"
+              >
+                <Bot className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
+                <span>DeepSeek AI Analysis</span>
+              </button>
             </div>
           </div>
         </div>
@@ -274,6 +289,14 @@ export default function Home() {
             {activeTab === 'crew' && (
               <div className="space-y-6">
                 <CrewPanel />
+                <TelemetryGrid position={currentPosition} isStale={isStale} />
+              </div>
+            )}
+
+            {/* Tab 5: DeepSeek AI Orbital Copilot */}
+            {activeTab === 'copilot' && (
+              <div className="space-y-6">
+                <DeepSeekCopilot currentPosition={currentPosition} />
                 <TelemetryGrid position={currentPosition} isStale={isStale} />
               </div>
             )}

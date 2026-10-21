@@ -11,13 +11,8 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_BASE_PATH: isGithubPages ? `/${repoName}` : '',
   },
-  ...(isGithubPages
-    ? {}
-    : {
-        cacheComponents: true,
-        partialPrefetching: true,
-      }),
   turbopack: {
+    root: process.cwd(),
     rules: {
       "*.css": {
         loaders: ["@tailwindcss/turbopack"],

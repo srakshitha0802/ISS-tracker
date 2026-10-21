@@ -3,7 +3,6 @@ import { validateISSPositionPayload } from '@/lib/validation';
 import { getSampleISSData } from '@/lib/sampleData';
 
 export const dynamic = 'force-static';
-export const revalidate = false;
 
 const PRIMARY_API_URL = 'https://api.wheretheiss.at/v1/satellites/25544';
 

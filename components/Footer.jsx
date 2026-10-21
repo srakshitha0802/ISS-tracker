@@ -17,7 +17,7 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Quick HUD Attribution Links */}
+          {/* Two Core APIs Ribbon */}
           <div className="flex flex-wrap items-center gap-3 text-xs font-mono">
             <a
               href="https://wheretheiss.at"
@@ -26,19 +26,30 @@ export default function Footer() {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-slate-900 border border-cyan-500/30 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all shadow-sm"
             >
               <Radio className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Where The ISS At? API</span>
+              <span>API 1: Where The ISS At?</span>
               <ExternalLink className="w-3 h-3 text-cyan-400/70" />
+            </a>
+
+            <a
+              href="https://platform.deepseek.com"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-indigo-950/80 border border-indigo-500/40 text-indigo-300 hover:text-white hover:border-indigo-400 transition-all shadow-sm"
+            >
+              <Terminal className="w-3.5 h-3.5 text-indigo-400" />
+              <span>API 2: DeepSeek AI</span>
+              <ExternalLink className="w-3 h-3 text-indigo-400/70" />
             </a>
 
             <a
               href="https://www.openstreetmap.org/copyright"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-slate-900 border border-cyan-500/30 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-slate-900 border border-slate-700/50 text-slate-400 hover:text-white transition-all shadow-sm text-[11px]"
             >
-              <Globe className="w-3.5 h-3.5 text-cyan-400" />
-              <span>CARTO & OpenStreetMap</span>
-              <ExternalLink className="w-3 h-3 text-cyan-400/70" />
+              <Globe className="w-3 h-3 text-slate-400" />
+              <span>Map: CARTO / OSM</span>
+              <ExternalLink className="w-2.5 h-2.5 text-slate-500" />
             </a>
           </div>
         </div>
