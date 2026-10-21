@@ -70,18 +70,18 @@ body {
 }
 
 .custom-iss-popup-glass .leaflet-popup-content-wrapper {
-  background: rgba(10, 15, 30, 0.88) !important;
+  background: rgba(10, 15, 30, 0.92) !important;
   color: #f8fafc !important;
-  border: 1px solid rgba(56, 189, 248, 0.4) !important;
-  border-radius: 20px !important;
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(56, 189, 248, 0.25) !important;
+  border: 1px solid rgba(6, 182, 212, 0.5) !important;
+  border-radius: 0px !important;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(6, 182, 212, 0.25) !important;
   backdrop-filter: blur(16px) !important;
 }
 
 .custom-iss-popup-glass .leaflet-popup-tip {
-  background: rgba(10, 15, 30, 0.88) !important;
-  border-left: 1px solid rgba(56, 189, 248, 0.3) !important;
-  border-top: 1px solid rgba(56, 189, 248, 0.3) !important;
+  background: rgba(10, 15, 30, 0.92) !important;
+  border-left: 1px solid rgba(6, 182, 212, 0.4) !important;
+  border-top: 1px solid rgba(6, 182, 212, 0.4) !important;
 }
 
 .custom-iss-popup-glass .leaflet-popup-content {
@@ -97,42 +97,43 @@ body {
 }
 
 .leaflet-container a.leaflet-popup-close-button:hover {
-  color: #38bdf8 !important;
+  color: #22d3ee !important;
 }
 
-/* Glassy Map Zoom Controls */
+/* Glassy Map Zoom Controls - Sharp Aerospace */
 .leaflet-bar {
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
-  border-radius: 14px !important;
+  border: 1px solid rgba(6, 182, 212, 0.4) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  border-radius: 0px !important;
   overflow: hidden;
   backdrop-filter: blur(12px) !important;
 }
 
 .leaflet-bar a {
-  background-color: rgba(15, 23, 42, 0.75) !important;
+  background-color: rgba(10, 15, 30, 0.88) !important;
   color: #f1f5f9 !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.3) !important;
+  border-radius: 0px !important;
   font-weight: bold !important;
   transition: all 0.2s ease;
 }
 
 .leaflet-bar a:hover {
-  background-color: rgba(56, 189, 248, 0.3) !important;
-  color: #38bdf8 !important;
+  background-color: rgba(6, 182, 212, 0.3) !important;
+  color: #22d3ee !important;
 }
 
 .leaflet-control-attribution {
-  background: rgba(10, 15, 30, 0.75) !important;
+  background: rgba(10, 15, 30, 0.85) !important;
   color: #94a3b8 !important;
   font-size: 10px !important;
   backdrop-filter: blur(8px);
-  border-top-left-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0px !important;
+  border: 1px solid rgba(6, 182, 212, 0.2);
 }
 
 .leaflet-control-attribution a {
-  color: #38bdf8 !important;
+  color: #22d3ee !important;
   font-weight: 600;
 }
 
@@ -143,14 +144,14 @@ body {
 }
 
 .scrollbar-thin::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.5);
+  background: rgba(15, 23, 42, 0.7);
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: rgba(56, 189, 248, 0.35);
-  border-radius: 4px;
+  background: rgba(6, 182, 212, 0.4);
+  border-radius: 0px;
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: rgba(56, 189, 248, 0.6);
+  background: rgba(6, 182, 212, 0.7);
 }

@@ -220,21 +220,21 @@ export function SparkleDoodle({ className = '', size = 24 }) {
  */
 export function MissionDecalBadge({ icon: Icon, title, subtitle, color = 'blue' }) {
   const styles = {
-    blue: 'bg-cyan-500/15 text-cyan-200 border-cyan-400/40 shadow-[0_4px_16px_rgba(6,182,212,0.15)] hover:border-cyan-400 backdrop-blur-md',
-    rose: 'bg-rose-500/15 text-rose-200 border-rose-400/40 shadow-[0_4px_16px_rgba(244,63,94,0.15)] hover:border-rose-400 backdrop-blur-md',
-    amber: 'bg-amber-500/15 text-amber-200 border-amber-400/40 shadow-[0_4px_16px_rgba(245,158,11,0.15)] hover:border-amber-400 backdrop-blur-md',
-    emerald: 'bg-emerald-500/15 text-emerald-200 border-emerald-400/40 shadow-[0_4px_16px_rgba(16,185,129,0.15)] hover:border-emerald-400 backdrop-blur-md',
-    purple: 'bg-purple-500/15 text-purple-200 border-purple-400/40 shadow-[0_4px_16px_rgba(168,85,247,0.15)] hover:border-purple-400 backdrop-blur-md'
+    blue: 'bg-cyan-950/80 text-cyan-200 border-cyan-400/60 shadow-[0_0_12px_rgba(6,182,212,0.2)] hover:border-cyan-300 backdrop-blur-md',
+    rose: 'bg-rose-950/80 text-rose-200 border-rose-400/60 shadow-[0_0_12px_rgba(244,63,94,0.2)] hover:border-rose-300 backdrop-blur-md',
+    amber: 'bg-amber-950/80 text-amber-200 border-amber-400/60 shadow-[0_0_12px_rgba(245,158,11,0.2)] hover:border-amber-300 backdrop-blur-md',
+    emerald: 'bg-emerald-950/80 text-emerald-200 border-emerald-400/60 shadow-[0_0_12px_rgba(16,185,129,0.2)] hover:border-emerald-300 backdrop-blur-md',
+    purple: 'bg-purple-950/80 text-purple-200 border-purple-400/60 shadow-[0_0_12px_rgba(168,85,247,0.2)] hover:border-purple-300 backdrop-blur-md'
   };
 
   return (
     <div
-      className={`flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-default select-none ${styles[color]}`}
+      className={`flex items-center gap-2.5 px-3.5 py-1.5 rounded-none border font-mono transition-all duration-300 hover:border-cyan-300 cursor-default select-none ${styles[color]}`}
     >
-      {Icon && <Icon className="w-5 h-5 shrink-0" />}
+      {Icon && <Icon className="w-4 h-4 shrink-0 text-cyan-400" />}
       <div className="leading-tight">
-        <div className="text-xs font-black tracking-wider uppercase">{title}</div>
-        {subtitle && <div className="text-[10px] font-medium opacity-80">{subtitle}</div>}
+        <div className="text-[11px] font-bold tracking-wider uppercase text-white">{title}</div>
+        {subtitle && <div className="text-[9px] text-slate-300 opacity-90">{subtitle}</div>}
       </div>
     </div>
   );

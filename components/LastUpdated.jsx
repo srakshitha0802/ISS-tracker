@@ -21,7 +21,7 @@ export default function LastUpdated({
   }, []);
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 rounded-2xl bg-slate-950/65 border border-white/10 text-xs font-semibold text-slate-300 shadow-xl backdrop-blur-xl">
+    <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 rounded-none bg-slate-950/80 border border-cyan-500/25 text-xs font-mono font-semibold text-slate-300 shadow-xl backdrop-blur-xl">
       <div className="flex items-center gap-2">
         <Clock className={`w-4 h-4 ${isStale ? 'text-amber-400' : 'text-cyan-400'}`} />
         <span>Last Polled:</span>

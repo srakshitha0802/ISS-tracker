@@ -14,30 +14,30 @@ export default function MovementTrail({
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-slate-950/65 shadow-2xl backdrop-blur-xl overflow-hidden text-white">
+    <div className="rounded-none border border-cyan-500/30 bg-slate-950/80 shadow-2xl backdrop-blur-xl overflow-hidden text-white">
       {/* Header bar */}
-      <div className="p-5 flex flex-wrap items-center justify-between gap-4 border-b border-white/10">
+      <div className="p-5 flex flex-wrap items-center justify-between gap-4 border-b border-cyan-500/20">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 flex items-center justify-center shadow-lg shadow-cyan-500/10">
-            <Route className="w-5 h-5" />
+          <div className="w-10 h-10 rounded-none bg-cyan-950/80 border border-cyan-400/60 text-cyan-300 flex items-center justify-center shadow-[0_0_12px_rgba(6,182,212,0.2)]">
+            <Route className="w-5 h-5 text-cyan-400" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-black text-white uppercase tracking-wide">
+              <h3 className="text-sm font-mono font-black text-white uppercase tracking-wider">
                 Recorded Flight Path
               </h3>
-              <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-cyan-950/80 text-cyan-300 border border-cyan-500/40">
+              <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-none bg-cyan-950/80 text-cyan-300 border border-cyan-500/40">
                 {trail.length} / 30 Observations
               </span>
             </div>
-            <p className="text-xs text-slate-400 font-medium">
+            <p className="text-xs font-mono text-slate-400">
               Real-time sequence of orbital points recorded during your browser session
             </p>
           </div>
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 font-mono">
           <button
             type="button"
             id="btn-trail-visibility"
@@ -45,14 +45,14 @@ export default function MovementTrail({
               soundEffects.playClick();
               onToggleTrail();
             }}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold border transition-colors ${
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-none text-xs font-bold border transition-colors ${
               isTrailVisible
-                ? 'bg-cyan-500/20 text-cyan-200 border-cyan-400/50 hover:bg-cyan-500/30'
-                : 'bg-slate-900/60 text-slate-400 border-white/10 hover:bg-slate-800'
+                ? 'bg-cyan-500/20 text-cyan-200 border-cyan-400/60 hover:bg-cyan-500/30 shadow-[0_0_8px_rgba(6,182,212,0.2)]'
+                : 'bg-slate-900 text-slate-400 border-white/10 hover:bg-slate-800'
             }`}
           >
             {isTrailVisible ? <Eye className="w-4 h-4 text-cyan-400" /> : <EyeOff className="w-4 h-4 text-slate-400" />}
-            <span>{isTrailVisible ? 'Trail Shown' : 'Trail Hidden'}</span>
+            <span>{isTrailVisible ? 'Trail Active' : 'Trail Hidden'}</span>
           </button>
 
           {trail.length > 0 && (
@@ -63,7 +63,7 @@ export default function MovementTrail({
                 soundEffects.playClick();
                 onClearTrail();
               }}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-none text-xs font-bold bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 transition-colors cursor-pointer"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Clear Trail</span>
@@ -77,7 +77,7 @@ export default function MovementTrail({
               soundEffects.playClick();
               setIsExpanded(!isExpanded);
             }}
-            className="p-2 rounded-xl bg-slate-900/60 hover:bg-slate-800 text-slate-300 border border-white/10 transition-colors"
+            className="p-1.5 rounded-none bg-slate-900 hover:bg-slate-800 text-slate-300 border border-cyan-500/30 transition-colors"
             aria-label={isExpanded ? 'Collapse trail history' : 'Expand trail history'}
           >
             {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}

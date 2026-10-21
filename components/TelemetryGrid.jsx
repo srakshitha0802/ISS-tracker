@@ -28,11 +28,11 @@ export default function TelemetryGrid({ position, isStale = false }) {
         {[...Array(6)].map((_, i) => (
           <div
             key={i}
-            className="h-32 rounded-3xl bg-slate-950/60 border border-white/10 animate-pulse flex flex-col justify-between p-5 backdrop-blur-xl"
+            className="h-32 rounded-none bg-slate-950/70 border border-cyan-500/20 animate-pulse flex flex-col justify-between p-5 backdrop-blur-xl"
           >
-            <div className="h-3 w-16 bg-slate-800 rounded-full"></div>
-            <div className="h-7 w-24 bg-slate-800 rounded-full"></div>
-            <div className="h-2 w-20 bg-slate-800 rounded-full"></div>
+            <div className="h-3 w-16 bg-slate-800 rounded-none"></div>
+            <div className="h-7 w-24 bg-slate-800 rounded-none"></div>
+            <div className="h-2 w-20 bg-slate-800 rounded-none"></div>
           </div>
         ))}
       </div>

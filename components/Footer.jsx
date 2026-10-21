@@ -1,59 +1,79 @@
 'use client';
 
 import React from 'react';
-import { ExternalLink, Heart, Sparkles } from 'lucide-react';
-import { AstronautSticker, SaturnSticker } from './SpaceStickers';
+import { ExternalLink, Radio, Shield, Globe, Terminal } from 'lucide-react';
+import ISSLogo from './ISSLogo';
 
 export default function Footer() {
   return (
-    <footer className="mt-16 border-t border-white/10 bg-slate-950/65 backdrop-blur-xl py-10 text-xs text-slate-400 relative z-10">
+    <footer className="mt-16 border-t border-cyan-500/20 bg-slate-950/90 backdrop-blur-2xl py-10 text-xs text-slate-400 relative z-10 shadow-[0_-4px_30px_rgba(0,0,0,0.7)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <AstronautSticker size={42} />
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-sm text-white">ISS Tracker</span>
-                <span className="text-white/20">•</span>
-                <span className="font-semibold text-slate-300">Live Space Station Tracker</span>
-              </div>
-              <p className="text-[11px] text-slate-400">
-                Built with precision for the Edzul 5-Day Development Challenge
-              </p>
-            </div>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-cyan-500/15">
+          {/* Logo and Tagline */}
+          <div className="space-y-1">
+            <ISSLogo size="sm" />
+            <p className="text-[11px] font-mono text-slate-400 pl-0.5">
+              Live Real-Time Satellite Telemetry & Vector Tracking Console • Edzul Challenge
+            </p>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-semibold">
+          {/* Quick HUD Attribution Links */}
+          <div className="flex flex-wrap items-center gap-3 text-xs font-mono">
             <a
               href="https://wheretheiss.at"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-slate-900 border border-cyan-500/30 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all shadow-sm"
             >
-              <span>Where the ISS At? API</span>
-              <ExternalLink className="w-3.5 h-3.5" />
+              <Radio className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Where The ISS At? API</span>
+              <ExternalLink className="w-3 h-3 text-cyan-400/70" />
             </a>
-            <span className="text-white/20">•</span>
+
             <a
               href="https://www.openstreetmap.org/copyright"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-slate-900 border border-cyan-500/30 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all shadow-sm"
             >
-              <span>OpenStreetMap & CARTO</span>
-              <ExternalLink className="w-3.5 h-3.5" />
+              <Globe className="w-3.5 h-3.5 text-cyan-400" />
+              <span>CARTO & OpenStreetMap</span>
+              <ExternalLink className="w-3 h-3 text-cyan-400/70" />
             </a>
           </div>
         </div>
 
-        {/* Limitations & Technical Disclaimers */}
-        <div className="border-t border-white/10 pt-5 text-[11px] text-slate-400 space-y-1.5 leading-relaxed">
-          <p>
-            <strong className="text-slate-200">Orbital Physics Note:</strong> The International Space Station completes approximately 15.54 orbits per day (one revolution every ~92.7 minutes) at an orbital inclination of 51.64° to the equator. Data is polled at an approximate 7-second cadence in accordance with public API rate limits.
-          </p>
-          <p>
-            The session movement trail maps discrete observation points captured within your active browser tab, while the forward ground track models the predicted orbital trajectory over the next 90 minutes.
-          </p>
+        {/* Aerospace Technical Notes Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 text-[11px] font-mono leading-relaxed">
+          <div className="p-3 rounded-none bg-slate-900/60 border border-cyan-500/15">
+            <div className="flex items-center gap-2 text-cyan-400 font-bold uppercase tracking-wider mb-1">
+              <Terminal className="w-3.5 h-3.5" />
+              <span>Orbital Mechanics</span>
+            </div>
+            <p className="text-slate-400">
+              Mean altitude 420 km, inclination 51.64°, orbital period ~92.7 minutes (15.54 rev/day).
+            </p>
+          </div>
+
+          <div className="p-3 rounded-none bg-slate-900/60 border border-cyan-500/15">
+            <div className="flex items-center gap-2 text-amber-400 font-bold uppercase tracking-wider mb-1">
+              <Radio className="w-3.5 h-3.5" />
+              <span>Telemetry Downlink</span>
+            </div>
+            <p className="text-slate-400">
+              Continuous 7-second rate-limited polling with exponential backoff & antimeridian split handling.
+            </p>
+          </div>
+
+          <div className="p-3 rounded-none bg-slate-900/60 border border-cyan-500/15">
+            <div className="flex items-center gap-2 text-emerald-400 font-bold uppercase tracking-wider mb-1">
+              <Shield className="w-3.5 h-3.5" />
+              <span>Spacecraft Registry</span>
+            </div>
+            <p className="text-slate-400">
+              NORAD #25544 • COSPAR 1998-067A • Continually inhabited since November 2000.
+            </p>
+          </div>
         </div>
       </div>
     </footer>

@@ -202,7 +202,12 @@ export default function ISSMap({
   };
 
   return (
-    <div className="relative w-full h-[520px] md:h-[620px] lg:h-[660px] rounded-3xl overflow-hidden border border-white/15 shadow-2xl bg-slate-950">
+    <div className="relative w-full h-[520px] md:h-[620px] lg:h-[660px] rounded-none overflow-hidden border border-cyan-500/40 shadow-2xl bg-slate-950">
+      {/* Aerospace Frame Corner Accents */}
+      <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-cyan-400 z-10 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-cyan-400 z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-cyan-400 z-10 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-cyan-400 z-10 pointer-events-none" />
       <MapContainer
         center={coordinates}
         zoom={3}
@@ -317,16 +322,16 @@ export default function ISSMap({
         {position && (
           <Marker ref={markerRef} position={coordinates} icon={issIcon}>
             <Popup className="custom-iss-popup-glass" closeButton={true}>
-              <div className="p-1 min-w-[240px] text-slate-100 font-sans">
-                <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-2.5">
+              <div className="p-1 min-w-[240px] text-slate-100 font-mono">
+                <div className="flex items-center justify-between border-b border-cyan-500/20 pb-2 mb-2.5">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <span className="w-2 h-2 rounded-none bg-cyan-400 animate-pulse"></span>
                     <span className="font-extrabold text-xs uppercase tracking-wider text-white">
                       ISS (ZARYA) #25544
                     </span>
                   </div>
                   <span
-                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
+                    className={`text-[10px] px-2 py-0.5 rounded-none font-bold uppercase tracking-wider ${
                       visibilityInfo.isDaylight
                         ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                         : 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
@@ -337,25 +342,25 @@ export default function ISSMap({
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="bg-slate-900/80 p-2 rounded-xl border border-white/10">
+                  <div className="bg-slate-900/90 p-2 rounded-none border border-cyan-500/20">
                     <span className="text-[10px] font-bold text-slate-400 uppercase block">Latitude</span>
                     <span className="font-mono font-bold text-cyan-300">{formatLatitude(position.latitude)}</span>
                   </div>
-                  <div className="bg-slate-900/80 p-2 rounded-xl border border-white/10">
+                  <div className="bg-slate-900/90 p-2 rounded-none border border-cyan-500/20">
                     <span className="text-[10px] font-bold text-slate-400 uppercase block">Longitude</span>
                     <span className="font-mono font-bold text-cyan-300">{formatLongitude(position.longitude)}</span>
                   </div>
-                  <div className="bg-slate-900/80 p-2 rounded-xl border border-white/10">
+                  <div className="bg-slate-900/90 p-2 rounded-none border border-cyan-500/20">
                     <span className="text-[10px] font-bold text-slate-400 uppercase block">Altitude</span>
                     <span className="font-mono font-bold text-white">{formatAltitude(position.altitude)}</span>
                   </div>
-                  <div className="bg-slate-900/80 p-2 rounded-xl border border-white/10">
+                  <div className="bg-slate-900/90 p-2 rounded-none border border-cyan-500/20">
                     <span className="text-[10px] font-bold text-slate-400 uppercase block">Heading</span>
                     <span className="font-mono font-bold text-white">{Math.round(headingBearing)}° N</span>
                   </div>
                 </div>
 
-                <div className="mt-2.5 pt-2 border-t border-white/10 text-[11px] text-slate-400 flex items-center justify-between">
+                <div className="mt-2.5 pt-2 border-t border-cyan-500/20 text-[11px] text-slate-400 flex items-center justify-between">
                   <span>Region:</span>
                   <span className="font-bold text-white flex items-center gap-1">
                     <Globe className="w-3.5 h-3.5 text-cyan-400" />
@@ -368,8 +373,8 @@ export default function ISSMap({
         )}
       </MapContainer>
 
-      {/* Floating Toolbar (Top Right) */}
-      <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2 pointer-events-auto">
+      {/* Floating Toolbar (Top Right) - Sharp Aerospace Controls */}
+      <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2 pointer-events-auto font-mono">
         {/* Follow ISS Button */}
         <button
           type="button"
@@ -378,15 +383,15 @@ export default function ISSMap({
             soundEffects.playClick();
             onToggleFollow();
           }}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-bold backdrop-blur-xl transition-all duration-200 shadow-xl border ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-none text-xs font-bold backdrop-blur-xl transition-all duration-200 shadow-xl border ${
             isFollowing
               ? 'bg-cyan-500/25 text-cyan-200 border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.35)]'
-              : 'bg-slate-900/80 text-slate-300 border-white/15 hover:bg-slate-800'
+              : 'bg-slate-950/90 text-slate-300 border-cyan-500/30 hover:bg-slate-900'
           }`}
         >
           <Crosshair className={`w-4 h-4 ${isFollowing ? 'animate-spin-slow' : 'text-slate-400'}`} />
           <span>{isFollowing ? 'Tracking ISS' : 'Follow ISS'}</span>
-          <span className={`w-2 h-2 rounded-full ${isFollowing ? 'bg-cyan-400 animate-ping' : 'bg-slate-500'}`} />
+          <span className={`w-2 h-2 rounded-none ${isFollowing ? 'bg-cyan-400 animate-ping' : 'bg-slate-500'}`} />
         </button>
 
         {/* Future Orbit Projection Toggle */}
@@ -397,14 +402,14 @@ export default function ISSMap({
             soundEffects.playClick();
             setShowPredictedOrbit(!showPredictedOrbit);
           }}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-bold backdrop-blur-xl transition-all border ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-none text-xs font-bold backdrop-blur-xl transition-all border ${
             showPredictedOrbit
               ? 'bg-amber-500/20 text-amber-300 border-amber-400/50 shadow-md'
-              : 'bg-slate-900/80 text-slate-400 border-white/15 hover:bg-slate-800'
+              : 'bg-slate-950/90 text-slate-400 border-cyan-500/30 hover:bg-slate-900'
           }`}
         >
           <Orbit className="w-4 h-4 text-amber-400" />
-          <span>{showPredictedOrbit ? 'Next Orbit (90m)' : 'Next Orbit Hidden'}</span>
+          <span>{showPredictedOrbit ? 'Next Orbit (90m)' : 'Next Orbit Off'}</span>
         </button>
 
         {/* Footprint Coverage Toggle */}
@@ -415,10 +420,10 @@ export default function ISSMap({
             soundEffects.playClick();
             setShowFootprint(!showFootprint);
           }}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-bold backdrop-blur-xl transition-all border ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-none text-xs font-bold backdrop-blur-xl transition-all border ${
             showFootprint
               ? 'bg-cyan-500/20 text-cyan-300 border-cyan-400/50 shadow-md'
-              : 'bg-slate-900/80 text-slate-400 border-white/15 hover:bg-slate-800'
+              : 'bg-slate-950/90 text-slate-400 border-cyan-500/30 hover:bg-slate-900'
           }`}
         >
           <Compass className="w-4 h-4 text-cyan-400" />
@@ -433,18 +438,18 @@ export default function ISSMap({
             soundEffects.playClick();
             onToggleTrail();
           }}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-bold backdrop-blur-xl transition-all border ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-none text-xs font-bold backdrop-blur-xl transition-all border ${
             isTrailVisible
               ? 'bg-cyan-500/20 text-cyan-300 border-cyan-400/50 shadow-md'
-              : 'bg-slate-900/80 text-slate-400 border-white/15 hover:bg-slate-800'
+              : 'bg-slate-950/90 text-slate-400 border-cyan-500/30 hover:bg-slate-900'
           }`}
         >
           {isTrailVisible ? <Eye className="w-4 h-4 text-cyan-400" /> : <EyeOff className="w-4 h-4 text-slate-400" />}
-          <span>{isTrailVisible ? 'Trail Shown' : 'Trail Hidden'}</span>
+          <span>{isTrailVisible ? 'Trail Active' : 'Trail Hidden'}</span>
         </button>
 
         {/* Map Layer Switcher */}
-        <div className="flex rounded-2xl overflow-hidden border border-white/15 bg-slate-900/80 backdrop-blur-xl shadow-lg p-1 gap-1">
+        <div className="flex rounded-none overflow-hidden border border-cyan-500/30 bg-slate-950/90 backdrop-blur-xl shadow-lg p-1 gap-1">
           {Object.entries(MAP_LAYERS).map(([key]) => (
             <button
               key={key}
@@ -453,9 +458,9 @@ export default function ISSMap({
                 soundEffects.playClick();
                 setActiveLayerKey(key);
               }}
-              className={`px-2.5 py-1 rounded-xl text-[10px] font-bold transition-all ${
+              className={`px-2.5 py-1 rounded-none text-[10px] font-bold transition-all ${
                 activeLayerKey === key
-                  ? 'bg-cyan-500 text-white shadow-sm'
+                  ? 'bg-cyan-500 text-slate-950 shadow-sm font-black'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
@@ -469,21 +474,21 @@ export default function ISSMap({
           type="button"
           onClick={toggleSound}
           title={isAudioMuted ? 'Unmute audio effects' : 'Mute audio effects'}
-          className="self-end p-2 rounded-2xl bg-slate-900/80 backdrop-blur-xl text-slate-300 hover:text-cyan-400 border border-white/15 shadow-xl transition-all"
+          className="self-end p-2 rounded-none bg-slate-950/90 backdrop-blur-xl text-slate-300 hover:text-cyan-400 border border-cyan-500/30 shadow-xl transition-all"
         >
           {isAudioMuted ? <VolumeX className="w-4 h-4 text-slate-500" /> : <Volume2 className="w-4 h-4 text-cyan-400" />}
         </button>
       </div>
 
       {/* Live Region & Coordinate Pill (Bottom Left) */}
-      <div className="absolute bottom-4 left-4 z-[1000] pointer-events-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 p-3 rounded-2xl bg-slate-950/85 backdrop-blur-xl border border-white/15 text-xs font-semibold text-white shadow-2xl">
+      <div className="absolute bottom-4 left-4 z-[1000] pointer-events-auto font-mono">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 p-3 rounded-none bg-slate-950/90 backdrop-blur-xl border border-cyan-500/40 text-xs font-semibold text-white shadow-2xl">
           <div className="flex items-center gap-1.5 font-bold text-cyan-300">
             <Globe className="w-4 h-4 text-cyan-400" />
             <span>{regionInfo.name}</span>
           </div>
           <span className="hidden sm:inline text-white/20">|</span>
-          <div className="font-mono text-[11px] text-slate-300 flex items-center gap-1.5">
+          <div className="text-[11px] text-slate-300 flex items-center gap-1.5">
             <Compass className="w-3.5 h-3.5 text-cyan-400" />
             <span>{formatLatitude(position?.latitude)}</span>
             <span className="text-white/20">,</span>

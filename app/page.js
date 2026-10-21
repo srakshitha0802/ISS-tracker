@@ -14,13 +14,7 @@ import VideoBackground from '@/components/VideoBackground';
 import ErrorState from '@/components/ErrorState';
 import LoadingState from '@/components/LoadingState';
 import Footer from '@/components/Footer';
-import {
-  AstronautSticker,
-  RocketSticker,
-  SaturnSticker,
-  SparkleDoodle,
-  MissionDecalBadge
-} from '@/components/SpaceStickers';
+import { MissionDecalBadge } from '@/components/SpaceStickers';
 import {
   AlertTriangle,
   Sparkles,
@@ -98,17 +92,17 @@ export default function Home() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 relative z-10">
         {/* Notice Banners for Stale / Demo Data */}
         {isDemo && (
-          <div className="rounded-2xl bg-amber-950/50 backdrop-blur-xl border border-amber-500/40 p-4 flex items-center justify-between gap-3 text-amber-200 text-xs shadow-lg">
+          <div className="rounded-none bg-amber-950/80 backdrop-blur-xl border border-amber-500/40 p-4 flex items-center justify-between gap-3 text-amber-200 text-xs shadow-lg font-mono">
             <div className="flex items-center gap-2.5">
               <Sparkles className="w-5 h-5 shrink-0 text-amber-400 animate-spin-slow" />
               <span>
-                <strong>DEMO DATA ACTIVE:</strong> You are viewing synthetic offline telemetry. Real movement tracking is paused.
+                <strong>DEMO TELEMETRY ACTIVE:</strong> Viewing synthetic offline data. Real orbital tracking is paused.
               </span>
             </div>
             <button
               type="button"
               onClick={toggleSimulationMode}
-              className="px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 font-bold border border-amber-500/40 transition-colors shrink-0 shadow-sm"
+              className="px-3.5 py-1.5 rounded-none bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 font-bold border border-amber-500/40 transition-colors shrink-0 shadow-sm uppercase tracking-wider"
             >
               Resume Live API
             </button>
@@ -116,71 +110,66 @@ export default function Home() {
         )}
 
         {isStale && !isDemo && (
-          <div className="rounded-2xl bg-amber-950/50 backdrop-blur-xl border border-amber-500/40 p-4 flex items-center justify-between gap-3 text-amber-200 text-xs shadow-lg">
+          <div className="rounded-none bg-amber-950/80 backdrop-blur-xl border border-amber-500/40 p-4 flex items-center justify-between gap-3 text-amber-200 text-xs shadow-lg font-mono">
             <div className="flex items-center gap-2.5">
               <AlertTriangle className="w-5 h-5 shrink-0 text-amber-400 animate-pulse" />
               <div>
-                <strong>STALE DATA:</strong> Telemetry refresh temporarily delayed ({error || 'Connection timed out'}). Showing last confirmed position.
+                <strong>STALE TELEMETRY:</strong> Polling temporarily delayed ({error || 'Connection timed out'}). Showing last confirmed vector.
               </div>
             </div>
             <button
               type="button"
               onClick={retry}
-              className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold transition-colors shrink-0 shadow-sm"
+              className="px-3.5 py-1.5 rounded-none bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold transition-colors shrink-0 shadow-sm uppercase tracking-wider"
             >
-              Retry Now
+              Retry Downlink
             </button>
           </div>
         )}
 
-        {/* 3. Hero Mission Overview with Space Stickers & Doodles */}
-        <div className="relative bg-slate-950/65 backdrop-blur-2xl rounded-3xl p-6 md:p-8 border border-white/15 shadow-2xl overflow-hidden">
-          {/* Playful Floating Space Stickers in corners */}
-          <div className="absolute -top-3 -right-2 hidden sm:block">
-            <AstronautSticker size={84} />
-          </div>
-          <div className="absolute bottom-2 right-24 hidden md:block opacity-90">
-            <SaturnSticker size={64} />
-          </div>
-          <div className="absolute top-3 left-1/3 hidden lg:block opacity-40">
-            <SparkleDoodle size={28} />
-          </div>
+        {/* 3. Hero Mission Overview - Sharp Aerospace Telemetry Bar */}
+        <div className="relative bg-slate-950/80 backdrop-blur-2xl rounded-none p-6 md:p-8 border border-cyan-500/30 shadow-[0_0_30px_rgba(0,0,0,0.8)] overflow-hidden font-mono">
+          {/* Aerospace Frame Corner Accents */}
+          <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-cyan-400" />
+          <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-cyan-400" />
+          <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-cyan-400" />
+          <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-cyan-400" />
 
-          <div className="relative z-10 max-w-2xl">
-            <div className="flex items-center gap-2 text-cyan-400 text-xs font-black tracking-wider uppercase mb-1.5">
+          <div className="relative z-10 max-w-3xl">
+            <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold tracking-widest uppercase mb-2">
               <Orbit className="w-4 h-4 text-cyan-400 animate-spin-slow" />
-              <span>International Space Station • 420km LEO Orbit</span>
+              <span>International Space Station • 420km LEO Trajectory</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-2">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-2 uppercase">
               Live Satellite Orbital Tracking & Vector Telemetry
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed mb-4">
               Currently flying over{' '}
-              <strong className="text-white font-bold bg-white/10 px-2.5 py-0.5 rounded-lg border border-white/15 inline-flex items-center gap-1.5 shadow-sm">
+              <strong className="text-white font-bold bg-slate-900 px-2.5 py-1 rounded-none border border-cyan-500/40 inline-flex items-center gap-1.5 shadow-sm">
                 <Globe className="w-3.5 h-3.5 text-cyan-400" />
                 <span>{currentRegion.name}</span>
               </strong>{' '}
-              at approximately <strong className="text-white">27,600 km/h</strong>.
+              at approximately <strong className="text-cyan-300">27,600 km/h (Mach 25.4)</strong>.
             </p>
 
-            {/* Playful Mission Decal Stickers */}
+            {/* Sharp Mission Decal Badges */}
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <MissionDecalBadge
                 icon={Award}
                 title="Expedition 72"
-                subtitle="7 Astronauts On Board"
+                subtitle="7 Crew Members"
                 color="blue"
               />
               <MissionDecalBadge
                 icon={Zap}
                 title="Mach 25.4"
-                subtitle="7.66 km/sec Velocity"
+                subtitle="7.66 km/s Speed"
                 color="amber"
               />
               <MissionDecalBadge
                 icon={Orbit}
                 title="16 Sunrises"
-                subtitle="Every 24 Earth Hours"
+                subtitle="Per 24 Hours"
                 color="purple"
               />
               <MissionDecalBadge
