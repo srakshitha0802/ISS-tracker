@@ -1,157 +1,302 @@
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
 
+/* ── Luxury Aerospace Design System (Grey, Gold, Silver & Glass) ──────── */
 :root {
-  --background: transparent;
-  --foreground: #f8fafc;
+  --bg-deep: #030712;
+  --bg-glass-base: rgba(10, 14, 26, 0.52);
+  --bg-glass-elevated: rgba(15, 20, 35, 0.65);
+  --bg-glass-gold: rgba(26, 20, 10, 0.6);
+  --bg-glass-silver: rgba(20, 24, 38, 0.55);
+
+  --border-silver: rgba(226, 232, 240, 0.18);
+  --border-silver-bright: rgba(248, 250, 252, 0.35);
+  --border-gold: rgba(245, 158, 11, 0.35);
+  --border-gold-bright: rgba(251, 191, 36, 0.65);
+
+  --text-platinum: #ffffff;
+  --text-silver: #e2e8f0;
+  --text-muted-silver: #94a3b8;
+  --accent-gold: #fbbf24;
+  --accent-gold-deep: #d97706;
+  --accent-cyan: #38bdf8;
+  --accent-emerald: #34d399;
+
+  --glow-gold: 0 0 25px rgba(245, 158, 11, 0.28);
+  --glow-silver: 0 0 25px rgba(226, 232, 240, 0.2);
+  --glow-cyan: 0 0 25px rgba(56, 189, 248, 0.25);
 }
 
 html {
-  background-color: #020617;
+  background-color: var(--bg-deep);
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: transparent;
-  color: #f8fafc;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text-silver);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Animations for Floating Space Elements */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(2deg);
-  }
+.font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-.animate-float {
-  animation: float 4s ease-in-out infinite;
+/* ── Metallic Shimmer & Gradients ───────────────────────────────────────── */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #fef08a 0%, #fbbf24 45%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-@keyframes floatSlow {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(-3deg);
-  }
+.text-silver-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.animate-float-slow {
-  animation: floatSlow 6s ease-in-out infinite;
+.border-gold-glow {
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.15), inset 0 1px 0 rgba(251, 191, 36, 0.2);
 }
 
-@keyframes spinSlow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.border-silver-glow {
+  border-color: rgba(226, 232, 240, 0.25);
+  box-shadow: 0 0 20px rgba(226, 232, 240, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-.animate-spin-slow {
-  animation: spinSlow 12s linear infinite;
+/* ── Glassmorphism Panels ───────────────────────────────────────────────── */
+.glass-panel {
+  background: rgba(10, 14, 26, 0.58);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+}
+.glass-panel:hover {
+  border-color: rgba(251, 191, 36, 0.3);
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.6), 0 0 24px rgba(245, 158, 11, 0.12);
 }
 
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
+.glass-panel-gold {
+  background: rgba(20, 16, 10, 0.62);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55), 0 0 20px rgba(245, 158, 11, 0.12), inset 0 1px 0 rgba(251, 191, 36, 0.25);
 }
 
-.animate-shimmer {
-  animation: shimmer 2s infinite linear;
+.glass-panel-silver {
+  background: rgba(18, 22, 34, 0.58);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(226, 232, 240, 0.22);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* Leaflet Glassmorphic Dark Theme Overrides */
+/* ── Modern Aerospace Chamfer & Geometric Shapes ───────────────────────── */
+.shape-chamfer {
+  clip-path: polygon(
+    12px 0%,
+    calc(100% - 12px) 0%,
+    100% 12px,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    12px 100%,
+    0% calc(100% - 12px),
+    0% 12px
+  );
+}
+
+.shape-chamfer-sm {
+  clip-path: polygon(
+    8px 0%,
+    calc(100% - 8px) 0%,
+    100% 8px,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    8px 100%,
+    0% calc(100% - 8px),
+    0% 8px
+  );
+}
+
+/* Aerospace gold corner brackets */
+.corner-brackets {
+  position: relative;
+}
+.corner-brackets::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid #fbbf24;
+  border-left: 2px solid #fbbf24;
+  pointer-events: none;
+  z-index: 10;
+}
+.corner-brackets::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 10px;
+  height: 10px;
+  border-bottom: 2px solid #fbbf24;
+  border-right: 2px solid #fbbf24;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Silver corner brackets */
+.corner-brackets-silver {
+  position: relative;
+}
+.corner-brackets-silver::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid #e2e8f0;
+  border-left: 2px solid #e2e8f0;
+  pointer-events: none;
+  z-index: 10;
+}
+.corner-brackets-silver::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 10px;
+  height: 10px;
+  border-bottom: 2px solid #e2e8f0;
+  border-right: 2px solid #e2e8f0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── Badges ────────────────────────────────────────────────────────────── */
+.badge-gold {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fef08a;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.15);
+}
+
+.badge-silver {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.25);
+  color: #f8fafc;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.08);
+}
+
+/* ── Leaflet Custom Styling Overrides ──────────────────────────────────── */
 .leaflet-container {
-  background: #020617 !important;
-  font-family: inherit !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 420px;
+  background: rgba(3, 7, 18, 0.85) !important;
+  font-family: 'Inter', sans-serif !important;
+  border-radius: inherit;
+  z-index: 10;
+}
+
+.iss-custom-icon {
+  background: transparent !important;
+  border: none !important;
 }
 
 .custom-iss-popup-glass .leaflet-popup-content-wrapper {
-  background: rgba(10, 15, 30, 0.92) !important;
+  background: rgba(10, 14, 26, 0.95) !important;
   color: #f8fafc !important;
-  border: 1px solid rgba(6, 182, 212, 0.5) !important;
-  border-radius: 0px !important;
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(6, 182, 212, 0.25) !important;
-  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(245, 158, 11, 0.4) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 158, 11, 0.2) !important;
+  backdrop-filter: blur(20px) !important;
 }
-
 .custom-iss-popup-glass .leaflet-popup-tip {
-  background: rgba(10, 15, 30, 0.92) !important;
-  border-left: 1px solid rgba(6, 182, 212, 0.4) !important;
-  border-top: 1px solid rgba(6, 182, 212, 0.4) !important;
+  background: rgba(10, 14, 26, 0.95) !important;
 }
-
 .custom-iss-popup-glass .leaflet-popup-content {
-  margin: 14px 16px !important;
-  line-height: 1.4 !important;
+  margin: 12px 14px !important;
 }
-
 .leaflet-container a.leaflet-popup-close-button {
   color: #94a3b8 !important;
-  padding: 6px !important;
-  top: 6px !important;
-  right: 6px !important;
+  padding: 8px !important;
+  top: 4px !important;
+  right: 4px !important;
+  font-size: 16px !important;
+  border-radius: 8px !important;
 }
-
 .leaflet-container a.leaflet-popup-close-button:hover {
-  color: #22d3ee !important;
+  color: #fbbf24 !important;
+  background: rgba(245, 158, 11, 0.15) !important;
 }
 
-/* Glassy Map Zoom Controls - Sharp Aerospace */
+/* Zoom controls */
 .leaflet-bar {
-  border: 1px solid rgba(6, 182, 212, 0.4) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
-  border-radius: 0px !important;
+  border: 1px solid rgba(245, 158, 11, 0.25) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+  border-radius: 10px !important;
   overflow: hidden;
-  backdrop-filter: blur(12px) !important;
+  backdrop-filter: blur(16px) !important;
 }
-
 .leaflet-bar a {
-  background-color: rgba(10, 15, 30, 0.88) !important;
-  color: #f1f5f9 !important;
-  border-bottom: 1px solid rgba(6, 182, 212, 0.3) !important;
-  border-radius: 0px !important;
-  font-weight: bold !important;
-  transition: all 0.2s ease;
+  background-color: rgba(10, 14, 26, 0.9) !important;
+  color: #cbd5e1 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  font-size: 16px !important;
+  line-height: 28px !important;
+  transition: all 0.15s ease;
 }
-
 .leaflet-bar a:hover {
-  background-color: rgba(6, 182, 212, 0.3) !important;
-  color: #22d3ee !important;
+  background-color: rgba(245, 158, 11, 0.2) !important;
+  color: #fbbf24 !important;
+}
+.leaflet-bar a:last-child {
+  border-bottom: none !important;
 }
 
 .leaflet-control-attribution {
-  background: rgba(10, 15, 30, 0.85) !important;
-  color: #94a3b8 !important;
-  font-size: 10px !important;
+  background: rgba(10, 14, 26, 0.85) !important;
+  color: #64748b !important;
+  font-size: 9px !important;
   backdrop-filter: blur(8px);
-  border-radius: 0px !important;
-  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 8px 0 0 0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-right: none !important;
+  border-bottom: none !important;
 }
-
 .leaflet-control-attribution a {
-  color: #22d3ee !important;
-  font-weight: 600;
+  color: #fbbf24 !important;
 }
 
-/* Custom Scrollbars */
-.scrollbar-thin::-webkit-scrollbar {
+/* ── Custom Scrollbar ─────────────────────────────────────────────────── */
+::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.7);
+::-webkit-scrollbar-track {
+  background: rgba(10, 14, 26, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.4);
 }
 
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background: rgba(6, 182, 212, 0.4);
-  border-radius: 0px;
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: rgba(6, 182, 212, 0.7);
+::selection {
+  background: rgba(245, 158, 11, 0.3);
+  color: #ffffff;
 }
