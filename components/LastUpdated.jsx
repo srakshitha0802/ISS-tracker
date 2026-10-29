@@ -19,9 +19,9 @@ export default function LastUpdated({
   }, []);
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 rounded-2xl glass-panel border border-white/10 text-xs text-slate-300">
+    <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 rounded-2xl glass-panel border border-cyan-500/20 text-xs text-slate-300">
       <div className="flex items-center gap-2.5">
-        <Clock className={`w-3.5 h-3.5 ${isStale ? 'text-amber-400 animate-pulse' : 'text-amber-400'}`} />
+        <Clock className={`w-3.5 h-3.5 ${isStale ? 'text-amber-400 animate-pulse' : 'text-cyan-400'}`} />
         <span className="text-slate-300 font-medium">Telemetry Sync:</span>
         <span className={`font-bold font-mono ${isStale ? 'text-amber-300' : 'text-white'}`}>
           {lastSuccessTime ? formatRelativeTime(lastSuccessTime) : 'Synchronizing…'}
@@ -32,7 +32,7 @@ export default function LastUpdated({
           </span>
         )}
         {isDemo && (
-          <span className="px-2 py-0.5 rounded-full badge-gold text-[9px] font-bold">
+          <span className="px-2 py-0.5 rounded-full badge-blue text-[9px] font-bold">
             SYNTHETIC
           </span>
         )}
@@ -41,7 +41,7 @@ export default function LastUpdated({
       <div className="flex items-center gap-4 text-[11px] font-mono">
         {observationTimestamp && (
           <div className="flex items-center gap-1.5">
-            <Radio className="w-3.5 h-3.5 text-amber-400" />
+            <Radio className="w-3.5 h-3.5 text-cyan-400" />
             <span className="text-slate-200">{formatTimestamp(observationTimestamp)}</span>
           </div>
         )}

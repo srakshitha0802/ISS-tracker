@@ -78,14 +78,14 @@ export default function TelemetryGrid({ position, isStale = false }) {
         tooltip="Orbital altitude above Earth's reference geoid"
       />
 
-      {/* 4. Orbital Velocity Card (Highlighted with Shiny Gold) */}
+      {/* 4. Orbital Velocity Card (Highlighted with Shiny Blue) */}
       <TelemetryCard
         title="Orbital Speed"
         value={typeof velocity === 'number' ? Math.round(velocity).toLocaleString() : '—'}
         unit="km/h"
         icon={Gauge}
         badge="Mach 25.4"
-        badgeVariant="gold"
+        badgeVariant="blue"
         subvalue={`Rate: ${formatVelocityKmS(velocity)}`}
         highlight={true}
         tooltip="Orbital velocity required to maintain zero-g continuous freefall"
@@ -97,7 +97,7 @@ export default function TelemetryGrid({ position, isStale = false }) {
         value={visibilityInfo.label}
         icon={visibilityInfo.isDaylight ? Sun : Moon}
         badge={visibilityInfo.isDaylight ? 'Sunlit' : 'Eclipse'}
-        badgeVariant={visibilityInfo.isDaylight ? 'gold' : 'silver'}
+        badgeVariant={visibilityInfo.isDaylight ? 'blue' : 'silver'}
         subvalue={visibilityInfo.isDaylight ? 'Arrays at 100%' : 'Battery Storage'}
         tooltip="Orbital lighting classification (Solar illumination vs Earth shadow)"
       />

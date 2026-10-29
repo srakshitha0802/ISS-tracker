@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useISSPosition } from '@/hooks/useISSPosition';
 import VideoBackground from '@/components/VideoBackground';
 import DashboardHeader from '@/components/DashboardHeader';
@@ -12,6 +12,8 @@ import PassCalculator from '@/components/PassCalculator';
 import CrewPanel from '@/components/CrewPanel';
 import PhysicsEnginePanel from '@/components/PhysicsEnginePanel';
 import DeepSeekCopilot from '@/components/DeepSeekCopilot';
+import WeatherDisasterPanel from '@/components/WeatherDisasterPanel';
+import DisasterNotificationToast from '@/components/DisasterNotificationToast';
 import ErrorState from '@/components/ErrorState';
 import LoadingState from '@/components/LoadingState';
 import Footer from '@/components/Footer';
@@ -25,21 +27,23 @@ import {
   Bot,
   Satellite,
   Wind,
-  Sparkles
+  Sparkles,
+  CloudLightning
 } from 'lucide-react';
 import { getGeographicRegion } from '@/lib/geocoding';
+import { fetchLiveDisasters, correlateDisastersWithISS } from '@/lib/disasterApi';
 
-// ── Stat Badge with Gold & Silver Sheen ───────────────────────────────────
-function StatBadge({ icon: Icon, label, value, variant = 'silver' }) {
+// ── Stat Badge with Shiny Blue & Glass Sheen ──────────────────────────────
+function StatBadge({ icon: Icon, label, value, variant = 'blue' }) {
   const variants = {
-    gold:   'badge-gold',
-    silver: 'badge-silver',
-    cyan:   'bg-cyan-500/15 border-cyan-400/40 text-cyan-200 shadow-[0_0_12px_rgba(6,182,212,0.2)]',
+    blue:   'bg-cyan-500/15 border-cyan-400/40 text-cyan-200 shadow-[0_0_12px_rgba(56,189,248,0.25)]',
+    cyan:   'bg-sky-500/15 border-sky-400/40 text-sky-200 shadow-[0_0_12px_rgba(14,165,233,0.25)]',
+    silver: 'bg-white/8 border-white/15 text-slate-200 shadow-[0_0_10px_rgba(255,255,255,0.08)]',
     emerald:'bg-emerald-500/15 border-emerald-400/40 text-emerald-200 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
   };
 
   return (
-    <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-mono font-medium backdrop-blur-xl ${variants[variant] || variants.silver}`}>
+    <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-mono font-medium backdrop-blur-xl ${variants[variant] || variants.blue}`}>
       <Icon className="w-3.5 h-3.5 shrink-0" />
       <span className="text-white/80">{label}</span>
       <span className="font-bold text-white">{value}</span>
@@ -47,19 +51,19 @@ function StatBadge({ icon: Icon, label, value, variant = 'silver' }) {
   );
 }
 
-// ── Glassy Alert Banner ───────────────────────────────────────────────────
+// ── Glassy Alert Banner (Shiny Blue Sheen) ────────────────────────────────
 function AlertBanner({ icon: Icon, iconClass, message, action, onAction }) {
   return (
-    <div className="flex items-center justify-between gap-3 px-5 py-3.5 rounded-2xl glass-panel-gold border border-amber-400/40 text-sm shadow-xl">
-      <div className="flex items-center gap-3 text-amber-200 font-medium">
-        <Icon className={`w-4 h-4 shrink-0 text-amber-400 ${iconClass}`} />
+    <div className="flex items-center justify-between gap-3 px-5 py-3.5 rounded-2xl glass-panel-blue border border-cyan-400/40 text-sm shadow-[0_0_25px_rgba(56,189,248,0.15)]">
+      <div className="flex items-center gap-3 text-cyan-200 font-medium">
+        <Icon className={`w-4 h-4 shrink-0 text-cyan-400 ${iconClass}`} />
         <span className="text-xs sm:text-sm">{message}</span>
       </div>
       {action && (
         <button
           type="button"
           onClick={onAction}
-          className="shrink-0 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-bold transition-all shadow-[0_0_12px_rgba(245,158,11,0.4)] cursor-pointer"
+          className="shrink-0 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 text-xs font-bold transition-all shadow-[0_0_15px_rgba(56,189,248,0.4)] cursor-pointer"
         >
           {action}
         </button>
@@ -68,15 +72,15 @@ function AlertBanner({ icon: Icon, iconClass, message, action, onAction }) {
   );
 }
 
-// ── Section Heading with Gold Icon & Silver Title ────────────────────────
+// ── Section Heading with Electric Cyan Icon & Silver Title ────────────────
 function SectionHeading({ icon: Icon, title, right }) {
   return (
     <div className="flex items-center justify-between mb-3 px-1">
       <div className="flex items-center gap-2.5">
-        <div className="p-1.5 rounded-lg bg-amber-500/15 border border-amber-400/30 text-amber-400">
+        <div className="p-1.5 rounded-lg bg-cyan-500/15 border border-cyan-400/30 text-cyan-400">
           <Icon className="w-4 h-4" />
         </div>
-        <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-100">{title}</h2>
+        <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-100 font-display">{title}</h2>
       </div>
       {right && <div className="text-xs font-mono text-slate-300">{right}</div>}
     </div>
@@ -86,6 +90,8 @@ function SectionHeading({ icon: Icon, title, right }) {
 // ── Main Dashboard Application ───────────────────────────────────────────
 export default function Home() {
   const [activeTab, setActiveTab] = useState('tracker');
+  const [disasters, setDisasters] = useState([]);
+  const [toastAlert, setToastAlert] = useState(null);
 
   const {
     currentPosition,
@@ -108,6 +114,43 @@ export default function Home() {
     loadDemoData
   } = useISSPosition({ intervalMs: 7000 });
 
+  // Load natural disasters for notification system and proximity alerts
+  useEffect(() => {
+    let isMounted = true;
+    async function initDisasters() {
+      try {
+        const events = await fetchLiveDisasters();
+        if (isMounted) {
+          setDisasters(events);
+          // If any critical event is in active storm/cyclone list, notify user
+          const criticalStorm = events.find(
+            (e) => e.severity === 'critical' || e.category === 'severeStorms'
+          );
+          if (criticalStorm) {
+            setToastAlert({
+              id: criticalStorm.id,
+              title: criticalStorm.title,
+              category: criticalStorm.category,
+              severity: criticalStorm.severity,
+              description: `NASA EONET active event detected at ${criticalStorm.latitude.toFixed(1)}°, ${criticalStorm.longitude.toFixed(1)}°.`
+            });
+          }
+        }
+      } catch (err) {
+        console.warn('Disaster init error:', err);
+      }
+    }
+    initDisasters();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Calculate correlated disasters relative to ISS position
+  const correlatedAlerts = React.useMemo(() => {
+    return correlateDisastersWithISS(currentPosition, disasters);
+  }, [currentPosition, disasters]);
+
   const isInitialLoading = status === 'INITIAL_LOADING' && !currentPosition;
   const isFatalError = status === 'ERROR' && !currentPosition;
   const isStale = status === 'STALE';
@@ -122,13 +165,23 @@ export default function Home() {
     : '25.4';
 
   return (
-    <div className="relative min-h-screen flex flex-col text-slate-100 overflow-x-hidden">
-      {/* ── Background Video Playback (gemini_generated_video_0a46d2c2.mp4) ── */}
+    <div className="relative min-h-screen flex flex-col text-slate-100 overflow-x-hidden font-sans">
+      {/* ── Background Video Playback (Preserved Intact) ── */}
       <VideoBackground />
+
+      {/* ── Real-Time Early Warning Notification Toast ── */}
+      <DisasterNotificationToast
+        alert={toastAlert}
+        onDismiss={() => setToastAlert(null)}
+        onViewDetails={() => {
+          setActiveTab('weather');
+          setToastAlert(null);
+        }}
+      />
 
       {/* ── Foreground Glassy UI Content ── */}
       <div className="relative z-10 flex flex-col min-h-screen">
-        {/* ── Header ── */}
+        {/* ── Header with Disaster Bell & Radar Tab ── */}
         <DashboardHeader
           status={status}
           isDemo={isDemo}
@@ -136,9 +189,11 @@ export default function Home() {
           canManualRefresh={canManualRefresh}
           isSimulationMode={isSimulationMode}
           activeTab={activeTab}
+          alerts={correlatedAlerts}
           onSelectTab={setActiveTab}
           onRefresh={refresh}
           onToggleSimulation={toggleSimulationMode}
+          onSelectAlert={() => setActiveTab('weather')}
         />
 
         {/* ── Main Layout ── */}
@@ -164,25 +219,25 @@ export default function Home() {
             />
           )}
 
-          {/* ── Hero Bar: Luxury Frosted Glass with Shiny Gold & Silver ── */}
-          <section className="glass-panel-gold rounded-3xl p-5 sm:p-7 border border-amber-400/40 relative overflow-hidden shadow-2xl">
-            {/* Aerospace Corner Accents */}
-            <span className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-amber-400 pointer-events-none" />
-            <span className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-amber-400 pointer-events-none" />
-            <span className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-amber-400 pointer-events-none" />
-            <span className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-amber-400 pointer-events-none" />
+          {/* ── Hero Bar: Luxury Frosted Glass with Shiny Blue Sheen ── */}
+          <section className="glass-panel-blue rounded-3xl p-5 sm:p-7 border border-cyan-400/40 relative overflow-hidden shadow-[0_0_40px_rgba(56,189,248,0.2)]">
+            {/* Aerospace Corner Accents (Electric Cyan) */}
+            <span className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400 pointer-events-none" />
+            <span className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-400 pointer-events-none" />
+            <span className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-400 pointer-events-none" />
+            <span className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyan-400 pointer-events-none" />
 
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
               <div className="space-y-1.5">
-                <div className="flex items-center gap-2 text-xs font-mono font-medium text-amber-300">
-                  <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/15 border border-amber-400/30">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <div className="flex items-center gap-2 text-xs font-mono font-medium text-cyan-300">
+                  <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-400/15 border border-cyan-400/30">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
                     ISS · NORAD #25544 · EXPEDITION 72
                   </span>
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">
                   Currently Overflying{' '}
-                  <span className="text-gold-gradient font-black drop-shadow-[0_2px_15px_rgba(245,158,11,0.4)]">
+                  <span className="text-blue-gradient font-black drop-shadow-[0_2px_18px_rgba(56,189,248,0.5)]">
                     {currentRegion.name}
                   </span>
                 </h1>
@@ -191,22 +246,34 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Quick Stat Badges & Ask AI CTA */}
+              {/* Quick Stat Badges & Dual CTA Buttons */}
               <div className="flex flex-wrap items-center gap-2">
-                <StatBadge icon={Award} label="Expedition" value="72" variant="gold" />
-                <StatBadge icon={Wind} label="Velocity" value={`Mach ${machNumber}`} variant="gold" />
+                <StatBadge icon={Award} label="Expedition" value="72" variant="blue" />
+                <StatBadge icon={Wind} label="Velocity" value={`Mach ${machNumber}`} variant="cyan" />
                 <StatBadge icon={Orbit} label="Daily Orbits" value="15.54" variant="silver" />
                 <StatBadge icon={ShieldCheck} label="NORAD" value="#25544" variant="emerald" />
 
+                {/* Weather & Disaster Radar CTA */}
+                <button
+                  type="button"
+                  id="btn-hero-launch-weather"
+                  onClick={() => setActiveTab('weather')}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-sky-500 via-cyan-400 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-slate-950 text-xs font-extrabold shadow-[0_0_20px_rgba(56,189,248,0.5)] transition-all hover:scale-105 active:scale-95 cursor-pointer font-sans"
+                >
+                  <CloudLightning className="w-3.5 h-3.5 text-slate-950 font-bold" />
+                  <span>Disaster Radar</span>
+                </button>
+
+                {/* Ask AI CTA */}
                 <button
                   type="button"
                   id="btn-hero-launch-ai"
                   onClick={() => setActiveTab('copilot')}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-300 hover:to-yellow-300 text-slate-950 text-xs font-extrabold shadow-[0_0_20px_rgba(245,158,11,0.5)] transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                  className="flex items-center gap-2 px-4 py-2 rounded-full glass-panel hover:border-cyan-400 text-cyan-200 hover:text-white text-xs font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer font-sans"
                 >
-                  <Bot className="w-3.5 h-3.5 text-slate-950 font-bold" />
-                  <span>Ask DeepSeek AI</span>
-                  <Sparkles className="w-3 h-3 text-slate-950" />
+                  <Bot className="w-3.5 h-3.5 text-cyan-400 font-bold" />
+                  <span>DeepSeek AI</span>
+                  <Sparkles className="w-3 h-3 text-cyan-300" />
                 </button>
               </div>
             </div>
@@ -238,8 +305,8 @@ export default function Home() {
                       icon={Globe}
                       title="Interactive Orbital Ground Track"
                       right={
-                        <span className="flex items-center gap-2 px-2.5 py-1 rounded-full badge-gold font-mono text-[11px]">
-                          <span className={`w-1.5 h-1.5 rounded-full ${isFollowing ? 'bg-amber-400 animate-ping' : 'bg-slate-500'}`} />
+                        <span className="flex items-center gap-2 px-2.5 py-1 rounded-full badge-blue font-mono text-[11px]">
+                          <span className={`w-1.5 h-1.5 rounded-full ${isFollowing ? 'bg-cyan-400 animate-ping' : 'bg-slate-500'}`} />
                           {isFollowing ? 'Auto-Tracking Active' : 'Manual Panning'}
                         </span>
                       }
@@ -279,14 +346,22 @@ export default function Home() {
                 </div>
               )}
 
-              {/* ════════ TAB 2: AI COPILOT ════════ */}
+              {/* ════════ TAB 2: DISASTER & WEATHER RADAR ════════ */}
+              {activeTab === 'weather' && (
+                <div className="space-y-5 animate-fade-up">
+                  <WeatherDisasterPanel issPosition={currentPosition} />
+                  <TelemetryGrid position={currentPosition} isStale={isStale} />
+                </div>
+              )}
+
+              {/* ════════ TAB 3: AI COPILOT ════════ */}
               {activeTab === 'copilot' && (
                 <div className="animate-fade-up" style={{ height: 'calc(100vh - 210px)', minHeight: '620px' }}>
                   <DeepSeekCopilot currentPosition={currentPosition} />
                 </div>
               )}
 
-              {/* ════════ TAB 3: RADAR / SIGHTING ════════ */}
+              {/* ════════ TAB 4: RADAR / SIGHTING ════════ */}
               {activeTab === 'sighting' && (
                 <div className="space-y-5 animate-fade-up">
                   <PassCalculator issPosition={currentPosition} />
@@ -294,7 +369,7 @@ export default function Home() {
                 </div>
               )}
 
-              {/* ════════ TAB 4: PHYSICS ENGINE ════════ */}
+              {/* ════════ TAB 5: PHYSICS ENGINE ════════ */}
               {activeTab === 'physics' && (
                 <div className="space-y-5 animate-fade-up">
                   <PhysicsEnginePanel position={currentPosition} />
@@ -302,7 +377,7 @@ export default function Home() {
                 </div>
               )}
 
-              {/* ════════ TAB 5: EXPEDITION CREW ════════ */}
+              {/* ════════ TAB 6: EXPEDITION CREW ════════ */}
               {activeTab === 'crew' && (
                 <div className="space-y-5 animate-fade-up">
                   <CrewPanel />

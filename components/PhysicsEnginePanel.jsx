@@ -22,23 +22,23 @@ export default function PhysicsEnginePanel({ position }) {
   const isDaylight = String(position?.visibility || '').toLowerCase() === 'daylight';
 
   return (
-    <div className="glass-panel rounded-3xl p-6 md:p-8 border border-amber-400/30 shadow-2xl space-y-6 text-white font-mono relative">
-      {/* Gold Corner Brackets */}
-      <span className="absolute top-0 left-0 w-3.5 h-3.5 border-t-2 border-l-2 border-amber-400 pointer-events-none" />
-      <span className="absolute top-0 right-0 w-3.5 h-3.5 border-t-2 border-r-2 border-amber-400 pointer-events-none" />
+    <div className="glass-panel rounded-3xl p-6 md:p-8 border border-cyan-400/40 shadow-2xl space-y-6 text-white font-mono relative">
+      {/* Cyan Corner Brackets */}
+      <span className="absolute top-0 left-0 w-3.5 h-3.5 border-t-2 border-l-2 border-cyan-400 pointer-events-none" />
+      <span className="absolute top-0 right-0 w-3.5 h-3.5 border-t-2 border-r-2 border-cyan-400 pointer-events-none" />
 
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/10">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-cyan-500/20">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-400/40 flex items-center justify-center text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.25)]">
+          <div className="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(56,189,248,0.25)]">
             <Orbit className="w-5 h-5 animate-spin-slow" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-base font-extrabold text-white tracking-wide">
+              <h3 className="text-base font-extrabold text-white tracking-wide font-display">
                 Orbital Physics & Solar Cycle Engine
               </h3>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full badge-gold">
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full badge-blue">
                 Keplerian LEO Dynamics
               </span>
             </div>
@@ -48,8 +48,8 @@ export default function PhysicsEnginePanel({ position }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-bold text-amber-200 badge-gold px-3.5 py-1.5 rounded-full">
-          <Activity className="w-3.5 h-3.5 text-amber-400" />
+        <div className="flex items-center gap-2 text-xs font-bold text-cyan-200 badge-blue px-3.5 py-1.5 rounded-full">
+          <Activity className="w-3.5 h-3.5 text-cyan-400" />
           <span>Orbital Energy: 30.5 MJ/kg</span>
         </div>
       </div>
@@ -57,22 +57,22 @@ export default function PhysicsEnginePanel({ position }) {
       {/* Physics Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* 1. Mach Number & Hypersonic Speed */}
-        <div className="p-5 rounded-2xl glass-panel-gold border border-amber-400/40 flex flex-col justify-between">
+        <div className="p-5 rounded-2xl glass-panel-blue border border-cyan-400/40 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-300">
                 Speed of Sound Multiple
               </span>
-              <Gauge className="w-4 h-4 text-amber-400" />
+              <Gauge className="w-4 h-4 text-cyan-400" />
             </div>
-            <div className="text-3xl font-black text-gold-gradient">
+            <div className="text-3xl font-black text-blue-gradient">
               Mach {machNum}
             </div>
             <p className="text-xs text-slate-300 mt-1">
               Rate: <span className="text-white font-bold">{formatVelocityKmS(velocity)}</span>
             </p>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-white/10 text-[10px] text-amber-300 font-bold flex items-center gap-1.5 uppercase">
+          <div className="mt-3 pt-2.5 border-t border-cyan-500/20 text-[10px] text-cyan-300 font-bold flex items-center gap-1.5 uppercase">
             <Zap className="w-3.5 h-3.5" />
             <span>22x Faster than airliners</span>
           </div>
@@ -85,38 +85,38 @@ export default function PhysicsEnginePanel({ position }) {
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
                 Next Illumination Shift
               </span>
-              {isDaylight ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-300" />}
+              {isDaylight ? <Sun className="w-4 h-4 text-cyan-400" /> : <Moon className="w-4 h-4 text-slate-300" />}
             </div>
             <div className="text-2xl font-black text-white">
-              ~{solarEvent.minutesRemaining} <span className="text-xs font-bold text-amber-300">mins</span>
+              ~{solarEvent.minutesRemaining} <span className="text-xs font-bold text-cyan-300">mins</span>
             </div>
             <p className="text-xs text-slate-300 mt-1">
               Target: <strong className="text-white">{solarEvent.event}</strong>
             </p>
           </div>
           <div className="mt-3 pt-2.5 border-t border-white/10 text-[10px] text-slate-300 font-bold flex items-center gap-1.5 uppercase">
-            <Sun className="w-3.5 h-3.5 text-amber-400" />
+            <Sun className="w-3.5 h-3.5 text-cyan-400" />
             <span>16 Sunrises & Sunsets / 24h</span>
           </div>
         </div>
 
         {/* 3. Solar Power Generation */}
-        <div className="p-5 rounded-2xl glass-panel-gold border border-amber-400/40 flex flex-col justify-between">
+        <div className="p-5 rounded-2xl glass-panel-blue border border-cyan-400/40 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-300">
                 Solar Array Output
               </span>
-              <BatteryCharging className="w-4 h-4 text-amber-400" />
+              <BatteryCharging className="w-4 h-4 text-cyan-400" />
             </div>
-            <div className="text-3xl font-black text-gold-gradient">
+            <div className="text-3xl font-black text-blue-gradient">
               {isDaylight ? '120 kW' : 'Battery'}
             </div>
             <p className="text-xs text-slate-300 mt-1">
               {isDaylight ? '8 Ultra-Flex Wings Active' : 'Li-Ion Battery Storage'}
             </p>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-white/10 text-[10px] text-amber-300 font-bold flex items-center gap-1.5 uppercase">
+          <div className="mt-3 pt-2.5 border-t border-cyan-500/20 text-[10px] text-cyan-300 font-bold flex items-center gap-1.5 uppercase">
             <Zap className="w-3.5 h-3.5" />
             <span>2,400 m² total PV surface</span>
           </div>
@@ -129,7 +129,7 @@ export default function PhysicsEnginePanel({ position }) {
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
                 Subsolar Zenith
               </span>
-              <Compass className="w-4 h-4 text-amber-400" />
+              <Compass className="w-4 h-4 text-cyan-400" />
             </div>
             <div className="text-lg font-black text-white">
               {position?.solar_lat !== null && position?.solar_lat !== undefined
@@ -141,16 +141,16 @@ export default function PhysicsEnginePanel({ position }) {
             </p>
           </div>
           <div className="mt-3 pt-2.5 border-t border-white/10 text-[10px] text-slate-300 font-bold flex items-center gap-1.5 uppercase">
-            <Orbit className="w-3.5 h-3.5 text-amber-400" />
+            <Orbit className="w-3.5 h-3.5 text-cyan-400" />
             <span>Earth axial tilt: 23.44°</span>
           </div>
         </div>
       </div>
 
       {/* Structural Specs */}
-      <div className="p-5 rounded-2xl glass-panel border border-white/10 text-xs">
-        <h4 className="font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
-          <Shield className="w-4 h-4 text-amber-400" />
+      <div className="p-5 rounded-2xl glass-panel border border-cyan-500/20 text-xs">
+        <h4 className="font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2 font-display">
+          <Shield className="w-4 h-4 text-cyan-400" />
           <span>Spacecraft Engineering & Structural Architecture</span>
         </h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-slate-300">
@@ -160,7 +160,7 @@ export default function PhysicsEnginePanel({ position }) {
           </div>
           <div>
             <span className="text-slate-400 block text-[10px] uppercase">On-Orbit Mass</span>
-            <span className="font-bold text-amber-300">444,615 kg (~445 Tonnes)</span>
+            <span className="font-bold text-cyan-300">444,615 kg (~445 Tonnes)</span>
           </div>
           <div>
             <span className="text-slate-400 block text-[10px] uppercase">Pressurized Volume</span>
