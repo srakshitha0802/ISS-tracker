@@ -3,8 +3,7 @@
 
 [![Deploy Next.js to GitHub Pages](https://github.com/srakshitha0802/ISS-tracker/actions/workflows/deploy.yml/badge.svg)](https://github.com/srakshitha0802/ISS-tracker/actions/workflows/deploy.yml)
 [![Live Demo](https://img.shields.io/badge/Live_Site-GitHub_Pages-06b6d4?style=flat&logo=github)](https://srakshitha0802.github.io/ISS-tracker/)
-[![Next.js 16](https://img.shields.io/badge/Next.js-16.4.2-black?style=flat&logo=next.js)](https://nextjs.org)
-[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-v4-06b6d4?style=flat&logo=tailwindcss)](https://tailwindcss.com)
+ [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-v4-06b6d4?style=flat&logo=tailwindcss)](https://tailwindcss.com)
 [![Tests Passing](https://img.shields.io/badge/Tests-35%2F35%20Pass-10b981?style=flat&logo=vitest)](https://github.com/srakshitha0802/ISS-tracker)
 [![Dual APIs](https://img.shields.io/badge/APIs-WhereTheISS%20%2B%20DeepSeek-6366f1?style=flat)](https://platform.deepseek.com)
 
@@ -126,3 +125,88 @@ Developed for the **Edzul 5-Day Development Challenge**.
 - Real-Time Orbital Telemetry: [Where The ISS At? API](https://wheretheiss.at) by Bill Shupp.  
 - AI Orbital Copilot: [DeepSeek AI API](https://platform.deepseek.com) (`deepseek-chat`).  
 - Map Data: © [OpenStreetMap](https://www.openstreetmap.org/copyright) and [CARTO](https://carto.com).
+
+
+
+
+
+
+
+2. Project Overview
+
+The ISS Tracker is a web application that displays real-time information about the International Space Station (ISS). It helps users understand the station's current location and orbital movement.
+
+3. Main Features
+
+- Displays the ISS location using live API data.
+- Shows telemetry information such as latitude, longitude, and altitude when available.
+- Provides an interactive space-themed dashboard.
+- Displays projected orbital paths and station information.
+- Includes an AI-powered assistant for space-related questions, subject to API availability.
+
+4. APIs Used
+
+Where the ISS At? API
+
+Used to retrieve ISS location and telemetry information.
+
+DeepSeek AI API
+
+Used to support AI-powered responses and space-related questions.
+
+Limitations:
+
+- Live data depends on API availability and internet connectivity.
+- API requests may fail due to server errors or rate limits.
+- AI responses may not always be accurate.
+- API keys must be protected and should never be published in the repository.
+
+5. Setup Instructions
+
+1. Open the project repository on GitHub.
+2. Download or clone the project to a computer.
+3. Install Node.js and npm.
+4. Open a terminal in the project folder.
+5. Run "npm install".
+6. Configure the required environment variables using the project's example environment file.
+7. Run "npm run dev".
+8. Open the local URL shown in the terminal to test the application.
+
+Note: Follow the actual scripts and configuration in "package.json" and the project documentation.
+
+6. Testing
+
+The project README reports 35 out of 35 tests passing. This should be verified against the latest test results.
+
+Testing checklist:
+
+- Check whether the application loads successfully.
+- Verify that live ISS information is displayed.
+- Check the displayed coordinates and telemetry.
+- Test the AI assistant if its API is configured.
+- Check the interface on mobile and desktop screens.
+- Test how the application responds when the internet or an API is unavailable.
+
+7. Demo Plan (3–5 Minutes)
+
+1. Introduction (30 seconds): Introduce the ISS Tracker and its purpose.
+2. Dashboard (1 minute): Show the interface and explain its main features.
+3. Live tracking (1 minute): Demonstrate the ISS location and available telemetry.
+4. AI assistant (1 minute): Show how the assistant answers a space-related question, if available.
+5. Testing and conclusion (30–60 seconds): Explain the tests, API limitations, and future improvements.
+
+8. Team Contributions
+
+- Project development: [Add the responsible team member's name and contribution.]
+- API integration: [Add the responsible team member's name and contribution.]
+- Documentation and demo: [Add your name and describe your work.]
+- Testing: [Add the responsible team member's name and contribution.]
+
+Update this section with the actual contributions of every team member.
+
+9. Future Improvements
+
+- Improve error handling when APIs are unavailable.
+- Add more detailed ISS tracking information.
+- Improve accessibility and mobile responsiveness.
+- Expand automated testing and documentation.
