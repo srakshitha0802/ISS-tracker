@@ -42,7 +42,7 @@ export async function POST(request) {
 
     if (isGemini) {
       const ai = new GoogleGenAI({ apiKey });
-      const modelName = body.model || 'gemini-flash-latest';
+      const modelName = body.model || 'gemini-flash-lite-latest';
 
       if (ping) {
         try {
@@ -53,14 +53,24 @@ export async function POST(request) {
           });
           return NextResponse.json({ ok: true, provider: 'Google Gemini', model: modelName });
         } catch (pingErr) {
-          return NextResponse.json(
-            {
-              ok: false,
-              provider: 'Google Gemini',
-              error: `Gemini verification failed: ${pingErr.message || 'Invalid API key or network error'}`
-            },
-            { status: 400 }
-          );
+          // If gemini-flash-lite-latest fails ping, try gemini-flash-latest
+          try {
+            await ai.models.generateContent({
+              model: 'gemini-flash-latest',
+              contents: 'ping',
+              config: { maxOutputTokens: 5 }
+            });
+            return NextResponse.json({ ok: true, provider: 'Google Gemini', model: 'gemini-flash-latest' });
+          } catch (pingErr2) {
+            return NextResponse.json(
+              {
+                ok: false,
+                provider: 'Google Gemini',
+                error: `Gemini verification failed: ${pingErr2.message || 'Invalid API key or network error'}`
+              },
+              { status: 400 }
+            );
+          }
         }
       }
 
@@ -140,10 +150,10 @@ export async function POST(request) {
           usage: geminiRes.usageMetadata || null
         });
       } catch (geminiErr) {
-        // Try fallback to gemini-2.5-flash or gemini-2.0-flash if model alias failed
+        // Try fallback to gemini-flash-latest or gemini-3.5-flash if primary model experienced demand spikes
         try {
           const fallbackRes = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-flash-latest',
             contents,
             config: {
               systemInstruction: systemPrompt,
@@ -153,20 +163,38 @@ export async function POST(request) {
           });
           return NextResponse.json({
             content: fallbackRes.text || '',
-            model: 'Google Gemini (gemini-2.5-flash)',
+            model: 'Google Gemini (gemini-flash-latest)',
             provider: 'Gemini',
             usage: fallbackRes.usageMetadata || null
           });
         } catch (innerErr) {
-          console.error('[Gemini Direct Error]:', innerErr);
-          return NextResponse.json(
-            {
-              error: 'PROVIDER_ERROR',
+          try {
+            const fallbackRes2 = await ai.models.generateContent({
+              model: 'gemini-3.5-flash',
+              contents,
+              config: {
+                systemInstruction: systemPrompt,
+                temperature: 0.7,
+                maxOutputTokens: 1500
+              }
+            });
+            return NextResponse.json({
+              content: fallbackRes2.text || '',
+              model: 'Google Gemini (gemini-3.5-flash)',
               provider: 'Gemini',
-              message: `Google Gemini API error: ${innerErr.message || 'Failed to generate response'}`
-            },
-            { status: 502 }
-          );
+              usage: fallbackRes2.usageMetadata || null
+            });
+          } catch (innerErr2) {
+            console.error('[Gemini Direct Error]:', innerErr2);
+            return NextResponse.json(
+              {
+                error: 'PROVIDER_ERROR',
+                provider: 'Gemini',
+                message: `Google Gemini API error: ${innerErr2.message || 'Failed to generate response'}`
+              },
+              { status: 502 }
+            );
+          }
         }
       }
     }
