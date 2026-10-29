@@ -24,9 +24,9 @@ export const metadata = {
   icons: {
     icon: [
       { url: `${siteUrl}/icon.svg`, type: 'image/svg+xml' },
-      { url: `${siteUrl}/logo.png`, sizes: '1254x1254', type: 'image/png' }
+      { url: `${siteUrl}/logo.jpeg`, type: 'image/jpeg' }
     ],
-    apple: [{ url: `${siteUrl}/logo.png`, sizes: '180x180', type: 'image/png' }]
+    apple: [{ url: `${siteUrl}/logo.jpeg`, sizes: '180x180', type: 'image/jpeg' }]
   },
   openGraph: {
     title: 'ISS Tracker — Live Real-Time Space Station Tracking',
@@ -34,7 +34,7 @@ export const metadata = {
       'Live ISS telemetry, interactive CARTO map, AI-powered orbital analysis, and crew info. Production-ready.',
     url: siteUrl,
     siteName: 'ISS Tracker',
-    images: [{ url: `${siteUrl}/logo.png`, width: 1254, height: 1254, alt: 'ISS Tracker' }],
+    images: [{ url: `${siteUrl}/logo.jpeg`, alt: 'ISS Tracker' }],
     locale: 'en_US',
     type: 'website'
   },
@@ -42,7 +42,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'ISS Tracker — Live Real-Time Space Station Tracking',
     description: 'Live ISS telemetry, interactive CARTO map, and AI-powered orbital intelligence.',
-    images: [`${siteUrl}/logo.png`]
+    images: [`${siteUrl}/logo.jpeg`]
   }
 };
 

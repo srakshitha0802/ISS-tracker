@@ -211,7 +211,7 @@ export default function ISSMap({
   onToggleTrail,
   onClearTrail
 }) {
-  const [activeLayer, setActiveLayer] = useState('dark');
+  const [activeLayer, setActiveLayer] = useState('voyager');
   const [showOrbit, setShowOrbit] = useState(true);
   const [showFootprint, setShowFootprint] = useState(true);
   const [showLayerMenu, setShowLayerMenu] = useState(false);

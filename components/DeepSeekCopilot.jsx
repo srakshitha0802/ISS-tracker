@@ -16,20 +16,12 @@ import {
   Sun,
   Globe,
   AlertCircle,
-  KeyRound,
   ShieldCheck,
-  X,
-  Eye,
-  EyeOff,
-  CheckCircle2,
-  ExternalLink,
-  Cpu
+  X
 } from 'lucide-react';
 import {
   queryDeepSeekAI,
-  getStoredApiKey,
-  setStoredApiKey,
-  testApiKeyConnection
+  getStoredApiKey
 } from '@/lib/deepseekApi';
 import { getGeographicRegion } from '@/lib/geocoding';
 
@@ -133,10 +125,6 @@ export default function DeepSeekCopilot({ currentPosition }) {
   const [hasAutoGreeted, setHasAutoGreeted] = useState(false);
   const [apiKey, setApiKey] = useState('');
   const [activeModel, setActiveModel] = useState('Autonomous Onboard AI');
-  const [showKeyModal, setShowKeyModal] = useState(false);
-  const [keyInput, setKeyInput] = useState('');
-  const [showKeyText, setShowKeyText] = useState(false);
-  const [testState, setTestState] = useState({ status: 'idle', message: '' });
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -146,7 +134,6 @@ export default function DeepSeekCopilot({ currentPosition }) {
     const stored = getStoredApiKey();
     if (stored) {
       setApiKey(stored);
-      setKeyInput(stored);
       setActiveModel(detectModelLabel(stored));
     }
   }, []);
@@ -262,45 +249,7 @@ I am your real-time **AI Chatbot**, ready to answer any questions across all dom
     setHasAutoGreeted(false);
   };
 
-  const handleSaveKey = () => {
-    const trimmed = keyInput.trim();
-    setApiKey(trimmed);
-    setStoredApiKey(trimmed);
-    setActiveModel(detectModelLabel(trimmed));
-    setTestState({ status: 'success', message: 'API Key saved to your browser session!' });
-    setTimeout(() => {
-      setShowKeyModal(false);
-      setTestState({ status: 'idle', message: '' });
-    }, 1200);
-  };
 
-  const handleClearKey = () => {
-    setKeyInput('');
-    setApiKey('');
-    setStoredApiKey('');
-    setActiveModel('Autonomous Onboard AI');
-    setTestState({ status: 'idle', message: 'Key removed. Operating on autonomous onboard intelligence.' });
-  };
-
-  const handleTestKey = async () => {
-    if (!keyInput.trim()) {
-      setTestState({ status: 'error', message: 'Please enter an API key to test.' });
-      return;
-    }
-    setTestState({ status: 'testing', message: 'Testing connection to provider...' });
-    const res = await testApiKeyConnection(keyInput.trim());
-    if (res.ok) {
-      setTestState({
-        status: 'success',
-        message: `✓ Connected successfully to ${res.provider} (${res.model})!`
-      });
-    } else {
-      setTestState({
-        status: 'error',
-        message: `✕ Authentication failed: ${res.error}`
-      });
-    }
-  };
 
   const isEmpty = messages.length === 0 && !isLoading;
 
@@ -340,20 +289,6 @@ I am your real-time **AI Chatbot**, ready to answer any questions across all dom
             <Globe className="w-3 h-3 text-cyan-400" />
             {region.name}
           </div>
-
-          {/* API Key Settings Button */}
-          <button
-            type="button"
-            onClick={() => {
-              setKeyInput(apiKey || getStoredApiKey());
-              setShowKeyModal(true);
-            }}
-            title="Configure AI API Key"
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/40 text-cyan-200 text-xs font-mono font-medium transition-all cursor-pointer shadow-[0_0_12px_rgba(56,189,248,0.2)]"
-          >
-            <KeyRound className="w-3.5 h-3.5 text-cyan-300" />
-            <span className="hidden md:inline">{apiKey ? 'Key Active' : 'API Key'}</span>
-          </button>
 
           {/* Clear chat */}
           {messages.length > 0 && (
@@ -551,132 +486,6 @@ I am your real-time **AI Chatbot**, ready to answer any questions across all dom
           </span>
         </div>
       </div>
-
-      {/* ── API Key Configuration Modal ── */}
-      {showKeyModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="w-full max-w-lg glass-panel-blue border border-cyan-400/50 rounded-2xl shadow-[0_0_50px_rgba(56,189,248,0.3)] p-6 relative">
-            <button
-              type="button"
-              onClick={() => {
-                setShowKeyModal(false);
-                setTestState({ status: 'idle', message: '' });
-              }}
-              className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2.5 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300">
-                <Sparkles className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-white font-display">AI Chatbot Settings</h3>
-                <p className="text-xs text-slate-300">
-                  Google Gemini (Pre-configured & Free), Groq, or OpenAI
-                </p>
-              </div>
-            </div>
-
-            <div className="space-y-4 text-xs">
-              <div>
-                <div className="flex items-center justify-between mb-1.5 font-mono">
-                  <label className="text-slate-200 font-medium">
-                    API Key
-                  </label>
-                  <a
-                    href="https://aistudio.google.com/app/apikey"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[11px] text-cyan-400 hover:text-cyan-300 flex items-center gap-1 underline underline-offset-2"
-                  >
-                    Get Free Gemini Key <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
-                <div className="relative">
-                  <input
-                    type={showKeyText ? 'text' : 'password'}
-                    value={keyInput}
-                    onChange={(e) => {
-                      setKeyInput(e.target.value);
-                      setTestState({ status: 'idle', message: '' });
-                    }}
-                    placeholder="Paste Gemini (AQ... or AIzaSy...)"
-                    className="w-full bg-black/60 border border-cyan-500/40 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 font-mono text-xs pr-10 focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowKeyText(!showKeyText)}
-                    className="absolute right-3 top-2.5 text-slate-400 hover:text-white cursor-pointer"
-                  >
-                    {showKeyText ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Supported Providers Guide */}
-              <div className="p-3 rounded-xl bg-slate-900/60 border border-cyan-500/20 space-y-2">
-                <span className="text-[11px] font-semibold text-cyan-300 flex items-center gap-1.5">
-                  <Cpu className="w-3.5 h-3.5 text-cyan-400" /> Supported Providers:
-                </span>
-                <ul className="space-y-1 text-slate-300 text-[11px] pl-1 font-mono">
-                  <li>• <strong className="text-cyan-300">Google Gemini (Active Default)</strong>: Free keys start with <code className="text-cyan-300 font-medium">AQ.</code> or <code className="text-cyan-300 font-medium">AIzaSy</code> (Flash Latest)</li>
-                  <li>• <strong className="text-white">Groq (Fast Free Alternative)</strong>: Keys start with <code className="text-cyan-300 font-medium">gsk_</code> (Llama-3.3)</li>
-                  <li>• <strong className="text-white">OpenAI</strong>: Keys start with <code className="text-cyan-300 font-medium">sk-proj-</code></li>
-                </ul>
-              </div>
-
-              {/* Status Message */}
-              {testState.message && (
-                <div
-                  className={`p-3 rounded-xl text-xs flex items-start gap-2 ${
-                    testState.status === 'success'
-                      ? 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-200'
-                      : testState.status === 'error'
-                      ? 'bg-rose-500/15 border border-rose-500/30 text-rose-200'
-                      : 'bg-cyan-500/15 border border-cyan-500/30 text-cyan-200'
-                  }`}
-                >
-                  {testState.status === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />}
-                  {testState.status === 'error' && <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />}
-                  {testState.status === 'testing' && <Loader2 className="w-4 h-4 text-cyan-400 animate-spin shrink-0 mt-0.5" />}
-                  <span className="leading-relaxed">{testState.message}</span>
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              <div className="flex items-center justify-between pt-2">
-                <button
-                  type="button"
-                  onClick={handleClearKey}
-                  className="px-3 py-2 rounded-xl text-slate-400 hover:text-rose-300 hover:bg-rose-500/10 transition-all cursor-pointer font-mono text-xs"
-                >
-                  Clear Key
-                </button>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={handleTestKey}
-                    disabled={testState.status === 'testing'}
-                    className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-semibold transition-all cursor-pointer text-xs"
-                  >
-                    Test Key
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleSaveKey}
-                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-bold transition-all shadow-[0_0_15px_rgba(56,189,248,0.4)] cursor-pointer text-xs"
-                  >
-                    Save & Activate
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

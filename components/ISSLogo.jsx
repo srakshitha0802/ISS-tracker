@@ -58,7 +58,7 @@ export default function ISSLogo({
           {!imageError ? (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
-              src={getAssetPath('/logo.png')}
+              src={getAssetPath('/logo.jpeg')}
               alt="ISS Tracker Official Aerospace Emblem"
               width={80}
               height={80}
