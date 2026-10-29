@@ -58,7 +58,7 @@ export default function TelemetryCard({
 
       {/* Main value */}
       <div className="flex items-baseline gap-1.5 mb-2.5">
-        <span className={`font-mono font-extrabold tracking-tight ${
+        <span className={`font-mono font-semibold tracking-tight ${
           highlight
             ? 'text-blue-gradient drop-shadow-[0_2px_14px_rgba(56,189,248,0.4)]'
             : 'text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]'

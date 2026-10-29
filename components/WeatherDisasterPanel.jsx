@@ -340,7 +340,7 @@ export default function WeatherDisasterPanel({ issPosition }) {
           <div className="flex flex-wrap items-center justify-between gap-3 px-1">
             <div className="flex items-center gap-2">
               <ShieldAlert className="w-5 h-5 text-cyan-400" />
-              <h2 className="text-sm font-extrabold uppercase tracking-wider text-white">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-white">
                 NASA EONET Global Natural Disaster Tracking
               </h2>
             </div>
@@ -391,7 +391,7 @@ export default function WeatherDisasterPanel({ issPosition }) {
                   {/* Category Accent Stripe */}
                   <div className="flex items-center justify-between gap-2 mb-2.5">
                     <span
-                      className={`text-[9px] font-mono font-extrabold uppercase px-2.5 py-0.5 rounded-full border ${
+                      className={`text-[9px] font-mono font-semibold uppercase px-2.5 py-0.5 rounded-full border ${
                         isCritical
                           ? 'bg-rose-500/15 border-rose-500/40 text-rose-300'
                           : 'bg-cyan-500/15 border-cyan-400/40 text-cyan-300'
@@ -415,7 +415,7 @@ export default function WeatherDisasterPanel({ issPosition }) {
                       <span className="text-slate-400">ISS Distance:</span>
                       <span
                         className={`font-bold ${
-                          isNearISS ? 'text-cyan-300 font-extrabold animate-pulse' : 'text-white'
+                          isNearISS ? 'text-cyan-300 font-semibold animate-pulse' : 'text-white'
                         }`}
                       >
                         {evt.distanceKm.toLocaleString()} km
@@ -509,7 +509,7 @@ export default function WeatherDisasterPanel({ issPosition }) {
                       {renderWeatherIcon(weatherData.condition.icon, 'w-10 h-10')}
                     </div>
                     <div>
-                      <div className="text-4xl font-extrabold text-white font-mono tracking-tight">
+                      <div className="text-4xl font-semibold text-white font-mono tracking-tight">
                         {weatherData.temperature}°C
                       </div>
                       <p className="text-xs font-semibold text-cyan-200 mt-0.5">
@@ -556,7 +556,7 @@ export default function WeatherDisasterPanel({ issPosition }) {
                       <span>Flood Hazard Predictor</span>
                     </span>
                     <span
-                      className={`text-[9px] font-mono font-extrabold uppercase px-2 py-0.5 rounded-full border ${
+                      className={`text-[9px] font-mono font-semibold uppercase px-2 py-0.5 rounded-full border ${
                         weatherData.floodRisk.badgeColor === 'rose'
                           ? 'bg-rose-500/20 text-rose-200 border-rose-400/40'
                           : weatherData.floodRisk.badgeColor === 'amber'
@@ -570,7 +570,7 @@ export default function WeatherDisasterPanel({ issPosition }) {
 
                   <div className="my-3">
                     <div className="flex items-baseline justify-between mb-1">
-                      <span className="text-2xl font-extrabold font-mono text-white">
+                      <span className="text-2xl font-semibold font-mono text-white">
                         {weatherData.floodRisk.score}%
                       </span>
                       <span className="text-[11px] text-slate-400 font-mono">
@@ -621,7 +621,7 @@ export default function WeatherDisasterPanel({ issPosition }) {
                       <span>Storm & Cyclone Predictor</span>
                     </span>
                     <span
-                      className={`text-[9px] font-mono font-extrabold uppercase px-2 py-0.5 rounded-full border ${
+                      className={`text-[9px] font-mono font-semibold uppercase px-2 py-0.5 rounded-full border ${
                         weatherData.stormRisk.badgeColor === 'rose'
                           ? 'bg-rose-500/20 text-rose-200 border-rose-400/40'
                           : weatherData.stormRisk.badgeColor === 'amber'
@@ -635,7 +635,7 @@ export default function WeatherDisasterPanel({ issPosition }) {
 
                   <div className="my-3">
                     <div className="flex items-baseline justify-between mb-1">
-                      <span className="text-2xl font-extrabold font-mono text-white">
+                      <span className="text-2xl font-semibold font-mono text-white">
                         {weatherData.stormRisk.score}%
                       </span>
                       <span className="text-[11px] text-slate-400 font-mono">
@@ -673,7 +673,7 @@ export default function WeatherDisasterPanel({ issPosition }) {
             {/* ── 7-Day Severe Weather Trend Outlook ── */}
             <section className="glass-panel p-5 rounded-3xl border border-white/10 space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-cyan-300 flex items-center gap-2">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-cyan-300 flex items-center gap-2">
                   <Sun className="w-4 h-4 text-cyan-400" />
                   <span>7-Day Predictive Disaster & Meteorological Outlook</span>
                 </h3>
@@ -716,7 +716,7 @@ export default function WeatherDisasterPanel({ issPosition }) {
             {/* ── Hourly Trajectory (Next 12 Hours) ── */}
             <section className="glass-panel p-4 sm:p-5 rounded-3xl border border-white/10 space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-cyan-300 flex items-center gap-2">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-cyan-300 flex items-center gap-2">
                   <Droplets className="w-4 h-4 text-cyan-400" />
                   <span>Next 12 Hours Precipitation & Storm Probability</span>
                 </h3>
@@ -753,7 +753,7 @@ export default function WeatherDisasterPanel({ issPosition }) {
                   <Sliders className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-extrabold text-white">Weather & Disaster APIs</h3>
+                  <h3 className="text-sm font-semibold text-white">Weather & Disaster APIs</h3>
                   <p className="text-[11px] text-slate-300 font-mono">Real-time Global Data Streams</p>
                 </div>
               </div>

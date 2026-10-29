@@ -32,16 +32,6 @@ export async function POST(request) {
 
     const apiKey = (clientKey || envKey).trim();
 
-    if (!apiKey) {
-      return NextResponse.json(
-        {
-          error: 'NO_API_KEY',
-          message: 'No AI API key configured. Operating with Onboard Orbital Intelligence.'
-        },
-        { status: 400 }
-      );
-    }
-
     // Auto-detect provider based on key format or environment
     const isGemini =
       apiKey.startsWith('AIza') ||

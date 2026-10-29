@@ -80,7 +80,7 @@ function FormattedMessage({ content }) {
     if (heading) {
       flushList();
       elements.push(
-        <p key={i} className="font-extrabold text-cyan-300 mt-3.5 mb-1.5 text-sm sm:text-base tracking-wide flex items-center gap-1.5">
+        <p key={i} className="font-semibold text-cyan-300 mt-3.5 mb-1.5 text-sm sm:text-base tracking-wide flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
           {heading[1]}
         </p>
@@ -167,12 +167,11 @@ export default function DeepSeekCopilot({ currentPosition }) {
   };
 
   function detectModelLabel(key) {
-    if (!key) return 'Google Gemini Flash';
-    if (key.startsWith('AIza') || key.startsWith('AQ.')) return 'Google Gemini Flash';
-    if (key.startsWith('gsk_')) return 'Groq (Llama-3.3)';
-    if (key.startsWith('sk-or-')) return 'OpenRouter AI';
-    if (key.startsWith('sk-proj-')) return 'OpenAI (GPT-4o)';
-    return 'Google Gemini AI';
+    if (!key) return 'AI Chatbot (Online)';
+    if (key.startsWith('AIza') || key.startsWith('AQ.')) return 'AI Chatbot (Gemini)';
+    if (key.startsWith('gsk_')) return 'AI Chatbot (Groq)';
+    if (key.startsWith('sk-proj-')) return 'AI Chatbot (OpenAI)';
+    return 'AI Chatbot';
   }
 
   // Initial welcome greeting
@@ -183,11 +182,11 @@ export default function DeepSeekCopilot({ currentPosition }) {
         role: 'assistant',
         id: 'welcome',
         model: activeModel,
-        content: `**ORBITAL COPILOT INTELLIGENCE ONLINE**
+        content: `**ORBITAL AI CHATBOT ONLINE**
 
 Ground tracking verified. Cruising at **${Math.round(currentPosition.velocity || 27580).toLocaleString()} km/h** (~Mach ${((currentPosition.velocity || 27580) / 1236).toFixed(1)}) at **${Math.round(currentPosition.altitude || 420)} km** altitude over **${region.name}**.
 
-I can answer **any questions** across all domains — from live ISS orbital dynamics, upcoming ground passes, and Expedition 72 crew experiments, to weather forecasts, natural disaster tracking, astronomy, mathematics, and general science.`
+I am your real-time **AI Chatbot**, ready to answer any questions across all domains — from live ISS orbital dynamics, upcoming ground passes, and Expedition 72 crew experiments, to weather forecasts, natural disaster tracking, astronomy, mathematics, and general science.`
       };
       setMessages([greeting]);
     }
@@ -322,14 +321,14 @@ I can answer **any questions** across all domains — from live ISS orbital dyna
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm sm:text-base font-extrabold text-white tracking-tight font-display">
-                ORBITAL <span className="text-blue-gradient font-black">AI COPILOT</span>
+              <h3 className="text-sm sm:text-base font-semibold text-white tracking-tight font-display">
+                ORBITAL <span className="text-blue-gradient font-bold">AI CHATBOT</span>
               </h3>
-              <span className="hidden sm:inline-block text-[9px] px-2 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-200 font-mono font-bold">
+              <span className="hidden sm:inline-block text-[9px] px-2 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-200 font-mono font-medium">
                 ● {activeModel.toUpperCase()}
               </span>
             </div>
-            <p className="text-[11px] text-slate-300 font-mono">
+            <p className="text-[11px] text-slate-300 font-mono font-normal">
               Live AI Intelligence · Multi-Domain Q&A Engine
             </p>
           </div>
@@ -337,7 +336,7 @@ I can answer **any questions** across all domains — from live ISS orbital dyna
 
         <div className="flex items-center gap-2">
           {/* Overflight region pill */}
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full badge-blue text-[10px] font-mono font-bold">
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full badge-blue text-[10px] font-mono font-medium">
             <Globe className="w-3 h-3 text-cyan-400" />
             {region.name}
           </div>
@@ -349,8 +348,8 @@ I can answer **any questions** across all domains — from live ISS orbital dyna
               setKeyInput(apiKey || getStoredApiKey());
               setShowKeyModal(true);
             }}
-            title="Configure AI API Key (DeepSeek, Groq, OpenAI)"
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/40 text-cyan-200 text-xs font-mono font-bold transition-all cursor-pointer shadow-[0_0_12px_rgba(56,189,248,0.2)]"
+            title="Configure AI API Key"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/40 text-cyan-200 text-xs font-mono font-medium transition-all cursor-pointer shadow-[0_0_12px_rgba(56,189,248,0.2)]"
           >
             <KeyRound className="w-3.5 h-3.5 text-cyan-300" />
             <span className="hidden md:inline">{apiKey ? 'Key Active' : 'API Key'}</span>
@@ -379,8 +378,8 @@ I can answer **any questions** across all domains — from live ISS orbital dyna
               <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-cyan-500/25 via-sky-400/20 to-blue-500/25 border border-cyan-400/40 flex items-center justify-center shadow-[0_0_25px_rgba(56,189,248,0.3)]">
                 <Sparkles className="w-8 h-8 text-cyan-300 animate-pulse" />
               </div>
-              <h4 className="text-lg font-bold text-white font-display">Ask ORBITAL Anything</h4>
-              <p className="text-xs text-slate-300 max-w-sm">
+              <h4 className="text-lg font-semibold text-white font-display">Ask AI Chatbot Anything</h4>
+              <p className="text-xs text-slate-300 max-w-sm font-normal">
                 Equipped with live ISS telemetry, orbital physics, severe weather tracking, and general science intelligence.
               </p>
             </div>
@@ -573,9 +572,9 @@ I can answer **any questions** across all domains — from live ISS orbital dyna
                 <Sparkles className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white font-display">AI Provider Settings</h3>
+                <h3 className="text-lg font-semibold text-white font-display">AI Chatbot Settings</h3>
                 <p className="text-xs text-slate-300">
-                  Google Gemini (Recommended), DeepSeek, Groq, or OpenAI
+                  Google Gemini (Pre-configured & Free), Groq, or OpenAI
                 </p>
               </div>
             </div>
@@ -583,7 +582,7 @@ I can answer **any questions** across all domains — from live ISS orbital dyna
             <div className="space-y-4 text-xs">
               <div>
                 <div className="flex items-center justify-between mb-1.5 font-mono">
-                  <label className="text-slate-200 font-semibold">
+                  <label className="text-slate-200 font-medium">
                     API Key
                   </label>
                   <a
@@ -603,7 +602,7 @@ I can answer **any questions** across all domains — from live ISS orbital dyna
                       setKeyInput(e.target.value);
                       setTestState({ status: 'idle', message: '' });
                     }}
-                    placeholder="Paste Gemini (AQ... or AIzaSy...) or DeepSeek (sk-...)"
+                    placeholder="Paste Gemini (AQ... or AIzaSy...)"
                     className="w-full bg-black/60 border border-cyan-500/40 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 font-mono text-xs pr-10 focus:outline-none"
                   />
                   <button
@@ -618,14 +617,13 @@ I can answer **any questions** across all domains — from live ISS orbital dyna
 
               {/* Supported Providers Guide */}
               <div className="p-3 rounded-xl bg-slate-900/60 border border-cyan-500/20 space-y-2">
-                <span className="text-[11px] font-bold text-cyan-300 flex items-center gap-1.5">
+                <span className="text-[11px] font-semibold text-cyan-300 flex items-center gap-1.5">
                   <Cpu className="w-3.5 h-3.5 text-cyan-400" /> Supported Providers:
                 </span>
                 <ul className="space-y-1 text-slate-300 text-[11px] pl-1 font-mono">
-                  <li>• <strong className="text-cyan-300">Google Gemini (Recommended)</strong>: Free keys start with <code className="text-cyan-300 font-bold">AQ.</code> or <code className="text-cyan-300 font-bold">AIzaSy</code> (Gemini Flash Latest)</li>
-                  <li>• <strong className="text-white">Groq (Fast Free Alternative)</strong>: Keys start with <code className="text-cyan-300 font-bold">gsk_</code> (Llama-3.3)</li>
-                  <li>• <strong className="text-white">DeepSeek</strong>: Keys start with <code className="text-cyan-300 font-bold">sk-</code> from platform.deepseek.com</li>
-                  <li>• <strong className="text-white">OpenAI</strong>: Keys start with <code className="text-cyan-300 font-bold">sk-proj-</code></li>
+                  <li>• <strong className="text-cyan-300">Google Gemini (Active Default)</strong>: Free keys start with <code className="text-cyan-300 font-medium">AQ.</code> or <code className="text-cyan-300 font-medium">AIzaSy</code> (Flash Latest)</li>
+                  <li>• <strong className="text-white">Groq (Fast Free Alternative)</strong>: Keys start with <code className="text-cyan-300 font-medium">gsk_</code> (Llama-3.3)</li>
+                  <li>• <strong className="text-white">OpenAI</strong>: Keys start with <code className="text-cyan-300 font-medium">sk-proj-</code></li>
                 </ul>
               </div>
 

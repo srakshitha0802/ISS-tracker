@@ -7,7 +7,7 @@ export const metadata = {
   metadataBase: new URL(siteUrl),
   title: 'ISS Tracker — Live Real-Time Space Station Tracking',
   description:
-    'Track the International Space Station (ISS) in real time. View live telemetry, interactive CARTO map, orbital trajectory prediction, crew profiles, and ask the ORBITAL AI assistant powered by DeepSeek.',
+    'Track the International Space Station (ISS) in real time. View live telemetry, interactive CARTO map, orbital trajectory prediction, crew profiles, and ask the ORBITAL AI Chatbot.',
   keywords: [
     'ISS Tracker',
     'International Space Station',
@@ -17,7 +17,7 @@ export const metadata = {
     'Space Station Telemetry',
     'Expedition 72',
     'Orbital Mechanics',
-    'DeepSeek AI',
+    'AI Chatbot',
     'CARTO Maps'
   ],
   authors: [{ name: 'ISS Tracker Team' }],
@@ -57,11 +57,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full dark">
       <head>
-        {/* Google Fonts — Rubik + Space Grotesk + JetBrains Mono */}
+        {/* Soft Modern Google Fonts — Plus Jakarta Sans + Inter + JetBrains Mono */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Rubik:ital,wght@0,300..900;1,300..900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>

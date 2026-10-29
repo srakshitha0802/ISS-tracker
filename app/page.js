@@ -80,7 +80,7 @@ function SectionHeading({ icon: Icon, title, right }) {
         <div className="p-1.5 rounded-lg bg-cyan-500/15 border border-cyan-400/30 text-cyan-400">
           <Icon className="w-4 h-4" />
         </div>
-        <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-100 font-display">{title}</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-100 font-display">{title}</h2>
       </div>
       {right && <div className="text-xs font-mono text-slate-300">{right}</div>}
     </div>
@@ -235,14 +235,14 @@ export default function Home() {
                     ISS · NORAD #25544 · EXPEDITION 72
                   </span>
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">
+                <h1 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight font-display">
                   Currently Overflying{' '}
-                  <span className="text-blue-gradient font-black drop-shadow-[0_2px_18px_rgba(56,189,248,0.5)]">
+                  <span className="text-blue-gradient font-semibold drop-shadow-[0_2px_18px_rgba(56,189,248,0.5)]">
                     {currentRegion.name}
                   </span>
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-300 font-mono">
-                  Cruising at <span className="text-white font-bold">Mach {machNumber}</span> ({currentPosition ? Math.round(currentPosition.velocity || 27580).toLocaleString() : '27,580'} km/h) · <span className="text-white font-bold">{currentPosition ? Math.round(currentPosition.altitude || 420) : 420} km</span> altitude · 51.64° inclination
+                  Cruising at <span className="text-white font-medium">Mach {machNumber}</span> ({currentPosition ? Math.round(currentPosition.velocity || 27580).toLocaleString() : '27,580'} km/h) · <span className="text-white font-medium">{currentPosition ? Math.round(currentPosition.altitude || 420) : 420} km</span> altitude · 51.64° inclination
                 </p>
               </div>
 
@@ -258,9 +258,9 @@ export default function Home() {
                   type="button"
                   id="btn-hero-launch-weather"
                   onClick={() => setActiveTab('weather')}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-sky-500 via-cyan-400 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-slate-950 text-xs font-extrabold shadow-[0_0_20px_rgba(56,189,248,0.5)] transition-all hover:scale-105 active:scale-95 cursor-pointer font-sans"
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-sky-500 via-cyan-400 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-slate-950 text-xs font-semibold shadow-[0_0_20px_rgba(56,189,248,0.5)] transition-all hover:scale-105 active:scale-95 cursor-pointer font-sans"
                 >
-                  <CloudLightning className="w-3.5 h-3.5 text-slate-950 font-bold" />
+                  <CloudLightning className="w-3.5 h-3.5 text-slate-950 font-medium" />
                   <span>Disaster Radar</span>
                 </button>
 
@@ -269,10 +269,10 @@ export default function Home() {
                   type="button"
                   id="btn-hero-launch-ai"
                   onClick={() => setActiveTab('copilot')}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full glass-panel hover:border-cyan-400 text-cyan-200 hover:text-white text-xs font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer font-sans"
+                  className="flex items-center gap-2 px-4 py-2 rounded-full glass-panel hover:border-cyan-400 text-cyan-200 hover:text-white text-xs font-medium transition-all hover:scale-105 active:scale-95 cursor-pointer font-sans"
                 >
-                  <Bot className="w-3.5 h-3.5 text-cyan-400 font-bold" />
-                  <span>DeepSeek AI</span>
+                  <Bot className="w-3.5 h-3.5 text-cyan-400 font-medium" />
+                  <span>AI Chatbot</span>
                   <Sparkles className="w-3 h-3 text-cyan-300" />
                 </button>
               </div>

@@ -89,7 +89,7 @@ export default function CrewPanel() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-base font-extrabold text-white uppercase tracking-wider font-display">
+              <h3 className="text-base font-semibold text-white uppercase tracking-wider font-display">
                 Expedition 72 Active Crew
               </h3>
               <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full badge-blue">
@@ -124,7 +124,7 @@ export default function CrewPanel() {
                   {member.agency}
                 </span>
               </div>
-              <h4 className="text-base font-extrabold text-white mt-1 group-hover:text-cyan-200 font-display">
+              <h4 className="text-base font-semibold text-white mt-1 group-hover:text-cyan-200 font-display">
                 {member.name}
               </h4>
               <p className="text-xs text-slate-300 mt-1 flex items-center gap-1.5">

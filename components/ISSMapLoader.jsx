@@ -15,7 +15,7 @@ function MapLoadingPlaceholder() {
           <Satellite className="w-8 h-8 text-cyan-300 animate-float" />
         </div>
         <div className="space-y-1">
-          <p className="text-base font-extrabold text-white font-display">Initializing Orbital Map</p>
+          <p className="text-base font-semibold text-white font-display">Initializing Orbital Map</p>
           <p className="text-xs text-slate-300 font-mono">
             Loading CARTO & Satellite Cartographic Engine…
           </p>

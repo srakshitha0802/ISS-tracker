@@ -15,8 +15,8 @@ export default function Footer() {
               <Satellite className="w-4 h-4 text-slate-950 font-bold" />
             </div>
             <div>
-              <div className="text-sm font-extrabold text-white font-display">
-                ISS <span className="text-blue-gradient font-black">TRACKER PRO</span>
+              <div className="text-sm font-semibold text-white font-display">
+                ISS <span className="text-blue-gradient font-bold">TRACKER PRO</span>
               </div>
               <div className="text-[10px] text-slate-400 font-mono">NORAD #25544 · Disaster Early Warning Station</div>
             </div>
@@ -28,7 +28,7 @@ export default function Footer() {
               { href: 'https://wheretheiss.at', icon: Radio, label: 'Where The ISS At?' },
               { href: 'https://eonet.gsfc.nasa.gov', icon: CloudLightning, label: 'NASA EONET' },
               { href: 'https://open-meteo.com', icon: Globe, label: 'Open-Meteo' },
-              { href: 'https://platform.deepseek.com', icon: Terminal, label: 'DeepSeek AI' }
+              { href: 'https://aistudio.google.com', icon: Terminal, label: 'AI Chatbot' }
             ].map(({ href, icon: Icon, label }) => (
               <a
                 key={href}

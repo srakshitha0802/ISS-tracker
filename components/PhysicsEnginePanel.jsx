@@ -35,10 +35,10 @@ export default function PhysicsEnginePanel({ position }) {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-base font-extrabold text-white tracking-wide font-display">
+              <h3 className="text-base font-semibold text-white tracking-wide font-display">
                 Orbital Physics & Solar Cycle Engine
               </h3>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full badge-blue">
+              <span className="text-[10px] font-medium px-2.5 py-0.5 rounded-full badge-blue">
                 Keplerian LEO Dynamics
               </span>
             </div>
@@ -48,7 +48,7 @@ export default function PhysicsEnginePanel({ position }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-bold text-cyan-200 badge-blue px-3.5 py-1.5 rounded-full">
+        <div className="flex items-center gap-2 text-xs font-medium text-cyan-200 badge-blue px-3.5 py-1.5 rounded-full">
           <Activity className="w-3.5 h-3.5 text-cyan-400" />
           <span>Orbital Energy: 30.5 MJ/kg</span>
         </div>
@@ -60,19 +60,19 @@ export default function PhysicsEnginePanel({ position }) {
         <div className="p-5 rounded-2xl glass-panel-blue border border-cyan-400/40 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-300">
+              <span className="text-[10px] font-medium uppercase tracking-wider text-cyan-300">
                 Speed of Sound Multiple
               </span>
               <Gauge className="w-4 h-4 text-cyan-400" />
             </div>
-            <div className="text-3xl font-black text-blue-gradient">
+            <div className="text-3xl font-semibold text-blue-gradient">
               Mach {machNum}
             </div>
             <p className="text-xs text-slate-300 mt-1">
-              Rate: <span className="text-white font-bold">{formatVelocityKmS(velocity)}</span>
+              Rate: <span className="text-white font-medium">{formatVelocityKmS(velocity)}</span>
             </p>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-cyan-500/20 text-[10px] text-cyan-300 font-bold flex items-center gap-1.5 uppercase">
+          <div className="mt-3 pt-2.5 border-t border-cyan-500/20 text-[10px] text-cyan-300 font-medium flex items-center gap-1.5 uppercase">
             <Zap className="w-3.5 h-3.5" />
             <span>22x Faster than airliners</span>
           </div>
@@ -82,19 +82,19 @@ export default function PhysicsEnginePanel({ position }) {
         <div className="p-5 rounded-2xl glass-panel-silver border border-white/20 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
+              <span className="text-[10px] font-medium uppercase tracking-wider text-slate-300">
                 Next Illumination Shift
               </span>
               {isDaylight ? <Sun className="w-4 h-4 text-cyan-400" /> : <Moon className="w-4 h-4 text-slate-300" />}
             </div>
-            <div className="text-2xl font-black text-white">
-              ~{solarEvent.minutesRemaining} <span className="text-xs font-bold text-cyan-300">mins</span>
+            <div className="text-2xl font-semibold text-white">
+              ~{solarEvent.minutesRemaining} <span className="text-xs font-medium text-cyan-300">mins</span>
             </div>
             <p className="text-xs text-slate-300 mt-1">
               Target: <strong className="text-white">{solarEvent.event}</strong>
             </p>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-white/10 text-[10px] text-slate-300 font-bold flex items-center gap-1.5 uppercase">
+          <div className="mt-3 pt-2.5 border-t border-white/10 text-[10px] text-slate-300 font-medium flex items-center gap-1.5 uppercase">
             <Sun className="w-3.5 h-3.5 text-cyan-400" />
             <span>16 Sunrises & Sunsets / 24h</span>
           </div>
@@ -104,19 +104,19 @@ export default function PhysicsEnginePanel({ position }) {
         <div className="p-5 rounded-2xl glass-panel-blue border border-cyan-400/40 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-300">
+              <span className="text-[10px] font-medium uppercase tracking-wider text-cyan-300">
                 Solar Array Output
               </span>
               <BatteryCharging className="w-4 h-4 text-cyan-400" />
             </div>
-            <div className="text-3xl font-black text-blue-gradient">
+            <div className="text-3xl font-semibold text-blue-gradient">
               {isDaylight ? '120 kW' : 'Battery'}
             </div>
             <p className="text-xs text-slate-300 mt-1">
               {isDaylight ? '8 Ultra-Flex Wings Active' : 'Li-Ion Battery Storage'}
             </p>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-cyan-500/20 text-[10px] text-cyan-300 font-bold flex items-center gap-1.5 uppercase">
+          <div className="mt-3 pt-2.5 border-t border-cyan-500/20 text-[10px] text-cyan-300 font-medium flex items-center gap-1.5 uppercase">
             <Zap className="w-3.5 h-3.5" />
             <span>2,400 m² total PV surface</span>
           </div>
@@ -126,12 +126,12 @@ export default function PhysicsEnginePanel({ position }) {
         <div className="p-5 rounded-2xl glass-panel-silver border border-white/20 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
+              <span className="text-[10px] font-medium uppercase tracking-wider text-slate-300">
                 Subsolar Zenith
               </span>
               <Compass className="w-4 h-4 text-cyan-400" />
             </div>
-            <div className="text-lg font-black text-white">
+            <div className="text-lg font-semibold text-white">
               {position?.solar_lat !== null && position?.solar_lat !== undefined
                 ? `${Number(position.solar_lat).toFixed(2)}°, ${Number(position.solar_lon).toFixed(2)}°`
                 : '10.70°, 101.70°'}
@@ -140,7 +140,7 @@ export default function PhysicsEnginePanel({ position }) {
               Direct perpendicular sunlight
             </p>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-white/10 text-[10px] text-slate-300 font-bold flex items-center gap-1.5 uppercase">
+          <div className="mt-3 pt-2.5 border-t border-white/10 text-[10px] text-slate-300 font-medium flex items-center gap-1.5 uppercase">
             <Orbit className="w-3.5 h-3.5 text-cyan-400" />
             <span>Earth axial tilt: 23.44°</span>
           </div>

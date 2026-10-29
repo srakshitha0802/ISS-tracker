@@ -83,7 +83,7 @@ export default function DisasterNotificationToast({
             <div className="space-y-1">
               <div className="flex items-center gap-1.5">
                 <span
-                  className={`text-[9px] font-mono font-extrabold uppercase px-2 py-0.5 rounded-full border ${
+                  className={`text-[9px] font-mono font-semibold uppercase px-2 py-0.5 rounded-full border ${
                     isCritical
                       ? 'bg-rose-500/20 text-rose-200 border-rose-400/40'
                       : 'bg-cyan-500/20 text-cyan-200 border-cyan-400/40'
@@ -98,7 +98,7 @@ export default function DisasterNotificationToast({
                 )}
               </div>
 
-              <h4 className="text-xs font-extrabold text-white leading-tight">
+              <h4 className="text-xs font-semibold text-white leading-tight">
                 {alert.title}
               </h4>
 

@@ -98,7 +98,7 @@ export default function DisasterAlertBell({
         {/* Pulse badge */}
         {totalCount > 0 && (
           <span
-            className={`absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full text-[9px] font-mono font-extrabold text-slate-950 border border-slate-950 shadow-md ${
+            className={`absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full text-[9px] font-mono font-semibold text-slate-950 border border-slate-950 shadow-md ${
               criticalCount > 0
                 ? 'bg-rose-400 animate-pulse'
                 : 'bg-cyan-300'
@@ -116,7 +116,7 @@ export default function DisasterAlertBell({
           <div className="flex items-center justify-between pb-3 border-b border-cyan-500/20">
             <div className="flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-cyan-400" />
-              <span className="font-extrabold uppercase tracking-wider text-white">
+              <span className="font-semibold uppercase tracking-wider text-white">
                 Disaster & Storm Radar
               </span>
             </div>

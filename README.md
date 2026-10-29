@@ -5,9 +5,9 @@
 [![Live Demo](https://img.shields.io/badge/Live_Site-GitHub_Pages-06b6d4?style=flat&logo=github)](https://srakshitha0802.github.io/ISS-tracker/)
  [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-v4-06b6d4?style=flat&logo=tailwindcss)](https://tailwindcss.com)
 [![Tests Passing](https://img.shields.io/badge/Tests-35%2F35%20Pass-10b981?style=flat&logo=vitest)](https://github.com/srakshitha0802/ISS-tracker)
-[![Dual APIs](https://img.shields.io/badge/APIs-WhereTheISS%20%2B%20DeepSeek-6366f1?style=flat)](https://platform.deepseek.com)
+[![Dual APIs](https://img.shields.io/badge/APIs-WhereTheISS%20%2B%20Gemini-6366f1?style=flat)](https://aistudio.google.com)
 
-An advanced, real-time aerospace flight telemetry and geospatial tracking web application for the **International Space Station (ISS, NORAD Catalog #25544)**. Powered by two primary APIs: the gold-standard **Where The ISS At? API** for real-time orbital vectors and the **DeepSeek AI API** for autonomous orbital copilot intelligence. Engineered with a sharp-edged mission control HUD aesthetic, audible 4K MP4 cosmic ambient soundtrack with 1-click unmuting and volume controls, precision Keplerian orbital mechanics, forward trajectory projections, 3D observer distance radar, and live Expedition 72 crew dossier.
+An advanced, real-time aerospace flight telemetry and geospatial tracking web application for the **International Space Station (ISS, NORAD Catalog #25544)**. Powered by two primary APIs: the gold-standard **Where The ISS At? API** for real-time orbital vectors and the **Google Gemini AI API** for autonomous orbital AI Chatbot intelligence. Engineered with a sharp-edged mission control HUD aesthetic, audible 4K MP4 cosmic ambient soundtrack with 1-click unmuting and volume controls, precision Keplerian orbital mechanics, forward trajectory projections, 3D observer distance radar, and live Expedition 72 crew dossier.
 
 🌐 **Live URL**: [https://srakshitha0802.github.io/ISS-tracker/](https://srakshitha0802.github.io/ISS-tracker/)  
 📦 **Repository**: [https://github.com/srakshitha0802/ISS-tracker](https://github.com/srakshitha0802/ISS-tracker)
@@ -30,10 +30,10 @@ An advanced, real-time aerospace flight telemetry and geospatial tracking web ap
 - **Autoplay Compliance & Gesture Recovery**: Initial muted autoplay adheres to strict browser security policies; seamlessly unmuted upon 1-click user interaction without stutter.
 - **Live Ambiance Controller**: Switch between **Cinema** (translucent HUD tint), **Vivid** (100% transparent zero-blur space view), and **Focus** (dark contrast analysis view).
 
-### 1.3. DeepSeek AI Orbital Copilot Engine
-- **Autonomous Aerospace Analyst**: Directly connects to the **DeepSeek API** (`deepseek-chat` / `deepseek-reasoner`).
+### 1.3. AI Chatbot Intelligence Engine
+- **Autonomous Aerospace Analyst**: Directly connects to the **Google Gemini API** (`gemini-flash-latest`).
 - **Real-Time Telemetry Synthesis**: Injects live latitude, longitude, altitude, velocity, daylight status, and overflight territory into AI flight dynamic briefings.
-- **Interactive Mission Terminal**: Run preset inquiries (Orbital Free-Fall Physics, Expedition 72 Science, ARISS HAM Radio Doppler shifts) or ask custom astrophysics questions.
+- **Interactive Mission Terminal**: Run preset inquiries (How AI Works, Orbital Free-Fall Physics, Expedition 72 Science, ARISS HAM Radio Doppler shifts) or ask custom astrophysics questions.
 - **Client & Server Key Management**: Optional direct API key configuration stored securely in browser `localStorage`.
 
 ### 1.4. Real-Time Telemetry & Failover Reliability (Where The ISS At? API)
@@ -63,13 +63,13 @@ An advanced, real-time aerospace flight telemetry and geospatial tracking web ap
 | :--- | :--- | :--- |
 | **Framework** | Next.js 16.4.2 (App Router) | Static export compatibility for GitHub Pages |
 | **Runtime** | React 19.3.0 | Modern client architecture & hooks |
-| **Styling** | Vanilla CSS + Tailwind CSS v4 | Sharp HUD glassmorphism design system |
+| **Styling** | Vanilla CSS + Tailwind CSS v4 | Soft modern glassmorphism design system |
 | **Telemetry API** | Where The ISS At? API | Real-time orbital vector and kinematics downlink |
-| **AI Copilot API** | DeepSeek AI API | Autonomous orbital dynamics intelligence (`deepseek-chat`) |
+| **AI Copilot API** | Google Gemini AI API | Autonomous orbital dynamics intelligence (`gemini-flash-latest`) |
 | **Mapping Engine** | Leaflet 1.9.4 & React-Leaflet 5.0 | Multi-layer interactive geospatial world map |
 | **Icons** | Lucide React | High-contrast vector icons (zero cartoon emojis) |
 | **Audio** | Native HTML5 Video + Web Audio API | Stereo 48kHz soundtrack + Quindar synthesizer |
-| **Testing** | Node.js Test Runner | 35/35 passing tests covering math, APIs, and validation |
+| **Testing** | Node.js Test Runner | 44/44 passing tests covering math, APIs, and validation |
 | **CI/CD** | GitHub Actions | Automated build & deploy to GitHub Pages |
 
 ---
@@ -97,7 +97,7 @@ Visit [http://localhost:3000](http://localhost:3000) to view the live dashboard.
 
 ### Run Quality Gates & Tests
 ```bash
-# Run 35 comprehensive automated tests
+# Run 44 comprehensive automated tests
 npm test
 
 # Run ESLint check
@@ -123,14 +123,8 @@ To enable GitHub Pages in your GitHub repository settings:
 ## 5. License & Credits
 Developed for the **Edzul 5-Day Development Challenge**.  
 - Real-Time Orbital Telemetry: [Where The ISS At? API](https://wheretheiss.at) by Bill Shupp.  
-- AI Orbital Copilot: [DeepSeek AI API](https://platform.deepseek.com) (`deepseek-chat`).  
+- AI Chatbot: [Google Gemini AI API](https://aistudio.google.com).  
 - Map Data: © [OpenStreetMap](https://www.openstreetmap.org/copyright) and [CARTO](https://carto.com).
-
-
-
-
-
-
 
 2. Project Overview
 
@@ -142,7 +136,7 @@ The ISS Tracker is a web application that displays real-time information about t
 - Shows telemetry information such as latitude, longitude, and altitude when available.
 - Provides an interactive space-themed dashboard.
 - Displays projected orbital paths and station information.
-- Includes an AI-powered assistant for space-related questions, subject to API availability.
+- Includes an AI Chatbot for space-related and multi-domain questions.
 
 4. APIs Used
 
@@ -150,9 +144,9 @@ Where the ISS At? API
 
 Used to retrieve ISS location and telemetry information.
 
-DeepSeek AI API
+Google Gemini AI API
 
-Used to support AI-powered responses and space-related questions.
+Used to support AI Chatbot responses and space-related questions.
 
 Limitations:
 

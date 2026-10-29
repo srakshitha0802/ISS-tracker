@@ -15,7 +15,7 @@ export default function LoadingState() {
       </div>
 
       <div className="space-y-1.5">
-        <div className="flex items-center justify-center gap-2 text-sm font-extrabold text-white font-display">
+        <div className="flex items-center justify-center gap-2 text-sm font-semibold text-white font-display">
           <Loader2 className="w-4 h-4 text-cyan-400 animate-spin" />
           Synchronizing Real-Time ISS Telemetry…
         </div>
