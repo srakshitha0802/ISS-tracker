@@ -19,7 +19,7 @@ import DisasterAlertBell from './DisasterAlertBell';
 const NAV_TABS = [
   { id: 'tracker', label: 'Orbital Tracker', icon: Orbit, color: 'blue' },
   { id: 'weather', label: 'Disaster & Weather', icon: CloudLightning, color: 'blue', isNew: true },
-  { id: 'copilot', label: 'AI Chatbot', icon: Bot, color: 'blue', accent: true },
+  { id: 'copilot', label: 'DeepSeek AI', icon: Bot, color: 'blue', accent: true },
   { id: 'sighting', label: 'Radar Pass', icon: Compass, color: 'silver' },
   { id: 'physics', label: 'Physics Engine', icon: Activity, color: 'silver' },
   { id: 'crew', label: 'Expedition 72', icon: Users, color: 'silver' }
@@ -49,16 +49,20 @@ export default function DashboardHeader({
             onClick={() => onSelectTab('tracker')}
             className="flex items-center gap-3 shrink-0 group text-left cursor-pointer"
           >
-            <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 via-sky-500 to-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(56,189,248,0.5)] group-hover:scale-105 transition-transform border border-cyan-200/40">
-              <Satellite className="w-5 h-5 text-slate-950 font-semibold" />
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-cyan-300 border-2 border-slate-950 animate-ping" />
-            </div>
+           <div className="relative shrink-0">
+  <img
+    src="/ISS-Tracker-Logo.png"
+    alt="ISS Tracker Logo"
+    className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
+  />
+  <span className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-cyan-300 border-2 border-slate-950 animate-ping" />
+</div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-sm sm:text-base font-semibold tracking-tight text-white group-hover:text-cyan-300 transition-colors font-display">
-                  ISS <span className="text-blue-gradient font-bold">TRACKER</span>
+                <span className="text-sm sm:text-base font-extrabold tracking-tight text-white group-hover:text-cyan-300 transition-colors font-display">
+                  ISS <span className="text-blue-gradient font-black">TRACKER</span>
                 </span>
-                <span className="hidden md:inline-block text-[9px] px-1.5 py-0.5 rounded-full bg-cyan-400/15 border border-cyan-400/40 text-cyan-200 font-mono font-medium">
+                <span className="hidden md:inline-block text-[9px] px-1.5 py-0.5 rounded-full bg-cyan-400/15 border border-cyan-400/40 text-cyan-200 font-mono font-semibold">
                   PRO
                 </span>
               </div>
